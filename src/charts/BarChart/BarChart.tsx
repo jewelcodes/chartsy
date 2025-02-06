@@ -10,16 +10,25 @@ import React, { ReactNode, useState } from "react";
 export function BarChart({ width, height, children }: Readonly<{ children: ReactNode,
     width?: number, height?: number }>) {
 
-    const [data, setData] = useState(new Object());
+    type Data = {
+        label: string;
+        values: [number, string][];
+    }
+
+    type DataContainer = {
+        [key: string]: Data;
+    };
+
+    const [data, setData] = useState<DataContainer>({});
     const [minValue, setMinValue] = useState(0);
     const [maxValue, setMaxValue] = useState(0);
 
     const callback = (label: string, value: number, color: string) => {
-        let newData = new Object(data);
+        let newData = new Object(data) as DataContainer;
         if(newData[label]) {
             newData[label].values.push([value, color]);
         } else {
-            newData[label] = new Object();
+            newData[label] = new Object() as Data;
             newData[label].label = label;
             newData[label].values = [[value, color]];
         }
@@ -31,7 +40,9 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
 
     const childrenProps = React.Children.map(children, (child) => {
         if(React.isValidElement(child)) {
-            return React.cloneElement(child, { callback: callback });
+            return React.cloneElement(child as React.ReactElement<{ callback:
+                (label: string, value: number, color: string) => void }>,
+                { callback: callback });
         }
     });
 
@@ -43,7 +54,8 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
             Max: {maxValue} Min: {minValue}
             {childrenProps}
 
-            <div className="chartsy-container" style={{ width: `${width||50}vw`, height: `${height||40}vh` }}>
+            <div className="chartsy-container" style={{ width: `${width||50}vw`,
+                height: `${height||40}vh` }}>
                 <div className="chartsy-bar-chart">
                     {Object.keys(data).map((label) => (
                         <div className="chartsy-bar-column" key={label}>
