@@ -58,39 +58,38 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
         }
     });
 
-    return (
-        <>
-            Max: {maxValue} Min: {minValue}
-            {childrenProps}
+    return (<>
+        Max: {maxValue} Min: {minValue}
+        {childrenProps}
 
-            <div className="chartsy-container" style={{ width: `${width||50}vw`,
-                height: `${height||40}vh` }}>
-                <div className="chartsy-bar-chart" style={{ gap: `${10 / Object.keys(data).length}%` }}>
-                    {Object.keys(data).map((label) => (
-                        <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>
-                            {data[label].values.map(([value, color]) => (
-                                <div className="chartsy-bar" style={{
-                                    height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
-                                    top: `${(1 - (value - minValue) / (maxValue - minValue)) * 100}%`,
-                                    backgroundColor: color,
-                                }} />
-                            ))}
-                        </div>
-                    ))}
-                </div>
+        <div className="chartsy-container" style={{ width: `${width||50}vw`,
+            height: `${height||40}vh` }}>
+            <div className="chartsy-bar-chart" style={{ gap: `${10 / Object.keys(data).length}%` }}>
+                {Object.keys(data).map((label) => (
+                    <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>
+                        {data[label].values.map(([value, color]) => (
+                            <div className="chartsy-bar" style={{
+                                height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
+                                top: `${(1 - (value - minValue) / (maxValue - minValue)) * 100}%`,
+                                backgroundColor: color,
+                            }} />
+                        ))}
+                    </div>
+                ))}
             </div>
-        </>
-    );
+        </div>
+    </>);
 }
 
-export function BarDataSeries({data, color, callback}: Readonly<
+export function BarDataSeries({data, color, hidden, callback}: Readonly<
     { data: Array<{label: string, value: number}>,
     color?: string,
+    hidden?: boolean,
     callback?: (label: string, value: number, color: string) => void }>) {
 
     const [called, setCalled] = useState(false);
 
-    if(!called) {
+    if(!hidden && !called) {
         setCalled(true);
         data.forEach(({label, value}) => {
             callback && callback(label, value, color || "#888");
