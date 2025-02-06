@@ -20,8 +20,8 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
     };
 
     const [data, setData] = useState<DataContainer>({});
-    const [minValue, setMinValue] = useState(0);
-    const [maxValue, setMaxValue] = useState(0);
+    const [minValue, setMinValue] = useState<number>(0);
+    const [maxValue, setMaxValue] = useState<number>(0);
 
     const callback = (label: string, value: number, color: string) => {
         let newData = new Object(data) as DataContainer;
@@ -32,10 +32,22 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
             newData[label].label = label;
             newData[label].values = [[value, color]];
         }
-    
+
+        let max = -Infinity, min = Infinity;
+        Object.keys(newData).forEach((label) => {
+            newData[label].values.forEach(([value, _]) => {
+                if(value > max) max = value;
+                if(value < min) min = value;
+            });
+        });
+
+        if(min > 0) min = 0;
+        if(max % 10) max += 10 - (max % 10);
+        if(min % 10) min -= (min % 10);
+
+        setMaxValue(max);
+        setMinValue(min);
         setData(newData);
-        if(value < minValue) setMinValue(value);
-        if(value > maxValue) setMaxValue(value);
     };
 
     const childrenProps = React.Children.map(children, (child) => {
@@ -45,9 +57,6 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
                 { callback: callback });
         }
     });
-
-    if(maxValue % 10) setMaxValue(maxValue + (10 - maxValue % 10));
-    if(minValue % 10) setMinValue(minValue - minValue % 10);
 
     return (
         <>
