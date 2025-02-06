@@ -56,9 +56,9 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
 
             <div className="chartsy-container" style={{ width: `${width||50}vw`,
                 height: `${height||40}vh` }}>
-                <div className="chartsy-bar-chart">
+                <div className="chartsy-bar-chart" style={{ gap: `${10 / Object.keys(data).length}%` }}>
                     {Object.keys(data).map((label) => (
-                        <div className="chartsy-bar-column" key={label}>
+                        <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>
                             {data[label].values.map(([value, color]) => (
                                 <div className="chartsy-bar" style={{
                                     height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
