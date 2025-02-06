@@ -17,7 +17,6 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
         if(series.some((s) => s.label === label)) return;
     
         setSeries(series => [...series, { label, value, color }]);
-        console.log("values = ", maxValue, minValue);
     };
 
     const childrenProps = React.Children.map(children, (child) => {
@@ -40,7 +39,7 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
             <div className="chartsy-container" style={{ width: `${width||50}vw`, height: `${height||40}vh` }}>
                 <div className="chartsy-bar-chart">
                     {seriesClean.map(({ label, value, color }) => (
-                        <div key={label} className="chartsy-bar" style={{
+                        <div className="chartsy-bar" style={{
                             height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
                             top: `${(1 - (value - minValue) / (maxValue - minValue)) * 100}%`,
                             backgroundColor: color,
@@ -57,9 +56,14 @@ export function BarDataSeries({data, color, callback}: Readonly<
     color?: string,
     callback?: (label: string, value: number, color: string) => void }>) {
 
-    data.forEach(({label, value}) => {
-        callback && callback(label, value, color || "gray");
-    });
+    const [called, setCalled] = useState(false);
+
+    if(!called) {
+        setCalled(true);
+        data.forEach(({label, value}) => {
+            callback && callback(label, value, color || "gray");
+        });
+    }
 
     return null;
 }
