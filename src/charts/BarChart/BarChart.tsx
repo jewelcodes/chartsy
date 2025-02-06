@@ -7,7 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ children }: Readonly<{ children: ReactNode }>) {
+export function BarChart({ width, height, children }: Readonly<{ children: ReactNode,
+    width?: number, height?: number }>) {
+
     const [maxValue, setMaxValue] = useState(0);
     const [minValue, setMinValue] = useState(0);
     const [series, setSeries] = useState([]);
@@ -31,7 +33,7 @@ export function BarChart({ children }: Readonly<{ children: ReactNode }>) {
         <>
             {childrenProps}
 
-            <div className="chartsy-container">
+            <div className="chartsy-container" style={{ width: `${width||50}vw`, height: `${height||50}vh` }}>
 
             </div>
         </>
