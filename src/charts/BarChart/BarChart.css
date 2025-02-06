@@ -2,3 +2,21 @@
  * Chartsy - elegant, customizable, and interactive standalone charts for React
  * Omar Elghoul, 2025
  */
+
+.chartsy-bar-chart {
+    display: flex;
+    flex-direction: row;
+    align-items: last;
+    gap: 2em;
+    height: 100%;
+}
+
+.chartsy-bar {
+    background-color: gray; /* random color for testing */
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    width: 100%;
+    line-height: 0em;
+    user-select: none;
+    position: relative;
+}
