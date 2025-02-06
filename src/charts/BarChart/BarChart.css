@@ -6,14 +6,20 @@
 .chartsy-bar-chart {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: last;
-    gap: 2em;
     height: 100%;
 }
 
+.chartsy-bar-column {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .chartsy-bar {
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
     width: 100%;
     line-height: 0em;
     user-select: none;

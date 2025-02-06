@@ -10,13 +10,23 @@ import React, { ReactNode, useState } from "react";
 export function BarChart({ width, height, children }: Readonly<{ children: ReactNode,
     width?: number, height?: number }>) {
 
-    const [series, setSeries] = useState([]);
+    const [data, setData] = useState(new Object());
+    const [minValue, setMinValue] = useState(0);
+    const [maxValue, setMaxValue] = useState(0);
 
     const callback = (label: string, value: number, color: string) => {
-        const obj = { label, value, color };
-        if(series.some((s) => s.label === label)) return;
+        let newData = new Object(data);
+        if(newData[label]) {
+            newData[label].values.push([value, color]);
+        } else {
+            newData[label] = new Object();
+            newData[label].label = label;
+            newData[label].values = [[value, color]];
+        }
     
-        setSeries(series => [...series, { label, value, color }]);
+        setData(newData);
+        if(value < minValue) setMinValue(value);
+        if(value > maxValue) setMaxValue(value);
     };
 
     const childrenProps = React.Children.map(children, (child) => {
@@ -25,11 +35,8 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
         }
     });
 
-    let maxValue = Math.max(...series.map(({ value }) => value));
-    let minValue = Math.min(...series.map(({ value }) => value));
-    if(minValue > 0) minValue = 0;
-
-    let seriesClean = Array.from(new Map(series.map(item => [item.label, item])).values());
+    if(maxValue % 10) setMaxValue(maxValue + (10 - maxValue % 10));
+    if(minValue % 10) setMinValue(minValue - minValue % 10);
 
     return (
         <>
@@ -38,12 +45,16 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
 
             <div className="chartsy-container" style={{ width: `${width||50}vw`, height: `${height||40}vh` }}>
                 <div className="chartsy-bar-chart">
-                    {seriesClean.map(({ label, value, color }) => (
-                        <div className="chartsy-bar" style={{
-                            height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
-                            top: `${(1 - (value - minValue) / (maxValue - minValue)) * 100}%`,
-                            backgroundColor: color,
-                        }} />
+                    {Object.keys(data).map((label) => (
+                        <div className="chartsy-bar-column" key={label}>
+                            {data[label].values.map(([value, color]) => (
+                                <div className="chartsy-bar" style={{
+                                    height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
+                                    top: `${(1 - (value - minValue) / (maxValue - minValue)) * 100}%`,
+                                    backgroundColor: color,
+                                }} />
+                            ))}
+                        </div>
                     ))}
                 </div>
             </div>
@@ -61,7 +72,7 @@ export function BarDataSeries({data, color, callback}: Readonly<
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
-            callback && callback(label, value, color || "gray");
+            callback && callback(label, value, color || "#888");
         });
     }
 
