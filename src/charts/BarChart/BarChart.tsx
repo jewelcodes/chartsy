@@ -7,9 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, labels, axis, axisColor, width, height, children }: Readonly<{
+export function BarChart({ live, ylabels, axis, axisColor, width, height, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
-    axis?: boolean, axisColor?: string, labels?: boolean }>) {
+    axis?: boolean, axisColor?: string, ylabels?: boolean }>) {
 
     type Data = {
         label: string;
@@ -82,7 +82,7 @@ export function BarChart({ live, labels, axis, axisColor, width, height, childre
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
-            marginBottom: labels ? "2em" : "0" }}>
+            marginBottom: ylabels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%`,
                 borderColor: axis ? axisColor || "red" : "transparent" }}>
@@ -97,7 +97,7 @@ export function BarChart({ live, labels, axis, axisColor, width, height, childre
                                 backgroundColor: color,
                             }} />
                         ))}
-                        {labels && <span className="chartsy-bar-label">{label}</span>}
+                        {ylabels && <span className="chartsy-bar-label">{label}</span>}
                     </div> /* chartsy-bar-column */
                 ))}
 
