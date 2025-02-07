@@ -7,8 +7,8 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ interactive, width, height, children }: Readonly<{ children: ReactNode,
-    width?: number, height?: number, interactive?: boolean }>) {
+export function BarChart({ live, width, height, children }: Readonly<{ children: ReactNode,
+    width?: number, height?: number, live?: boolean }>) {
 
     type Data = {
         label: string;
@@ -78,7 +78,7 @@ export function BarChart({ interactive, width, height, children }: Readonly<{ ch
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh` }}>
-            <div className={`chartsy-bar-chart ${interactive ? "chartsy-bar-interactive" : ""}`}
+            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%` }}>
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>

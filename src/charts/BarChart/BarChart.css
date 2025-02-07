@@ -25,6 +25,6 @@
     position: relative;
 }
 
-.chartsy-bar-interactive:hover .chartsy-bar-column:not(:hover) {
+.chartsy-bar-live:hover .chartsy-bar-column:not(:hover) {
     opacity: 0.6;
 }
