@@ -5,4 +5,10 @@
 
 .chartsy-container {
     position: relative;
+    box-sizing: border-box;
+    display: block;
+}
+
+.chartsy-container * {
+    transition: all 0.2s ease-in-out;
 }
