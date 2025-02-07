@@ -4,6 +4,7 @@
  */
 
 .chartsy-bar-chart {
+    --left-margin: 5em;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -13,6 +14,10 @@
     border-left: 1px solid;
     border-color: transparent;
     padding: 0 1em;
+}
+
+.chartsy-bar-axis {
+    margin-left: var(--left-margin)
 }
 
 .chartsy-bar-column {
@@ -37,15 +42,17 @@
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
+    font-size: smaller;
 }
 
 .chartsy-bar-ylabel {
     position: absolute;
     left: 0;
     text-align: right;
-    width: 4em;
+    width: var(--left-margin);
     text-overflow: clip;
     overflow: hidden;
+    font-size: smaller;
 }
 
 .chartsy-bar-live:hover .chartsy-bar-column:not(:hover) {
