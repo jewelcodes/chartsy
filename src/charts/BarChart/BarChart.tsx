@@ -7,9 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, labels, axis, width, height, children }: Readonly<{
+export function BarChart({ live, labels, axis, axisColor, width, height, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
-    axis?: boolean, labels?: boolean }>) {
+    axis?: boolean, axisColor?: string, labels?: boolean }>) {
 
     type Data = {
         label: string;
@@ -77,14 +77,14 @@ export function BarChart({ live, labels, axis, width, height, children }: Readon
     });
 
     return (<>
-        Max: {maxValue} Min: {minValue}
         {childrenProps}
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
             marginBottom: labels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
-                style={{ gap: `${10 / Object.keys(data).length}%` }}>
+                style={{ gap: `${10 / Object.keys(data).length}%`,
+                borderColor: axis ? axisColor || "red" : "transparent" }}>
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>
