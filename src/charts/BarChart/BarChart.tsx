@@ -42,8 +42,8 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
             });
         });
 
-        max *= 1.15;
-        min *= 0.85;
+        max *= 1.1;
+        min *= 0.9;
 
         const range = max - min;
         if(range > 1) {
@@ -62,6 +62,20 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
             if(rounded < min) min = rounded;
             else min = Math.floor(min);
         }
+
+        if(max === min) max++;
+
+        if(max > 1000000) max = Math.ceil(max / 500000) * 500000;
+        else if(max > 100000) max = Math.ceil(max / 50000) * 50000;
+        else if(max > 10000) max = Math.ceil(max / 5000) * 5000;
+        else if(max > 1000) max = Math.ceil(max / 500) * 500;
+        else if(max > 100) max = Math.ceil(max / 50) * 50;
+
+        if(min < -1000000) min = Math.floor(min / 500000) * 500000;
+        else if(min < -100000) min = Math.floor(min / 50000) * 50000;
+        else if(min < -10000) min = Math.floor(min / 5000) * 5000;
+        else if(min < -1000) min = Math.floor(min / 500) * 500;
+        else if(min < -100) min = Math.floor(min / 50) * 50;
 
         setMaxValue(max);
         setMinValue(min);
@@ -89,16 +103,16 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
             marginBottom: xlabels ? "2em" : "0" }}>
-            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
+            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""} 
+                ${axis ? "chartsy-bar-axis" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%`,
-                borderColor: axis ? axisColor || "red" : "transparent",
-                marginLeft: ylabels ? "5em" : "0" }}>
+                borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
                 
                 {ylabels && steps.map((step) => (
                     <span key={step} className="chartsy-bar-ylabel" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
                     }}>
-                        {step}
+                        {step.toLocaleString()}
                     </span>
                 ))}
 
