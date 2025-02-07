@@ -9,6 +9,9 @@
     flex-wrap: nowrap;
     align-items: last;
     height: 100%;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-color: transparent;
 }
 
 .chartsy-bar-column {
