@@ -28,6 +28,7 @@
 .chartsy-bar-label {
     position: absolute;
     top: calc(100% + 1em);
+    text-align: center;
 }
 
 .chartsy-bar-live:hover .chartsy-bar-column:not(:hover) {
