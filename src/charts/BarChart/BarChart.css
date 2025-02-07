@@ -25,3 +25,7 @@
     user-select: none;
     position: relative;
 }
+
+.chartsy-bar-interactive:hover .chartsy-bar-column:not(:hover) {
+    opacity: 0.6;
+}
