@@ -47,8 +47,13 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
             if(max % 10) max += 10 - (max % 10);
             if(min % 10) min -= (min % 10);
         } else {
-            max = Math.ceil(max);
-            min = Math.floor(min);
+            let rounded = Math.round(max * 2) / 2;
+            if(rounded > max) max = rounded;
+            else max = Math.ceil(max);
+            
+            rounded = Math.round(min * 2) / 2;
+            if(rounded < min) min = rounded;
+            else min = Math.floor(min);
         }
 
         setMaxValue(max);
