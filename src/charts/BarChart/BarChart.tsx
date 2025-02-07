@@ -76,8 +76,14 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
         }
     });
 
+    const range = maxValue - minValue;
+    let stepCount = Math.ceil(range / 10);
+    if(stepCount > 10) stepCount = 10;
+    const stepSize = range / stepCount;
+
+    const steps = Array.from({length: stepCount + 1}, (_, i) => minValue + i * stepSize);
+
     return (<>
-        Max: {maxValue} Min: {minValue}
         {childrenProps}
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
@@ -87,6 +93,14 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
                 style={{ gap: `${10 / Object.keys(data).length}%`,
                 borderColor: axis ? axisColor || "red" : "transparent",
                 marginLeft: ylabels ? "5em" : "0" }}>
+                
+                {ylabels && steps.map((step) => (
+                    <span key={step} className="chartsy-bar-ylabel" style={{
+                        top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
+                    }}>
+                        {step}
+                    </span>
+                ))}
 
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
