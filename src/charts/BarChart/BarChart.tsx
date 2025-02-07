@@ -7,9 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, ylabels, axis, axisColor, width, height, children }: Readonly<{
+export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, height, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
-    axis?: boolean, axisColor?: string, ylabels?: boolean }>) {
+    axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean }>) {
 
     type Data = {
         label: string;
@@ -106,8 +106,8 @@ export function BarChart({ live, ylabels, axis, axisColor, width, height, childr
     </>);
 }
 
-export function BarDataSeries({data, color, hidden, callback}: Readonly<
-    { data: Array<{label: string, value: number}>,
+export function BarDataSeries({data, color, hidden, callback}: Readonly<{
+    data: Array<{label: string, value: number}>,
     color?: string,
     hidden?: boolean,
     callback?: (label: string, value: number, color: string) => void }>) {
