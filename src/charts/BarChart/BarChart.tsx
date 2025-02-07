@@ -52,7 +52,7 @@ export function BarChart({ live, labels, axis, axisColor, width, height, childre
             min = Math.floor(min);
 
             if(max % 10) max += 10 - (max % 10);
-            if(min % 10) min += (min % 10);
+            if(min % 10) min -= (10 - (Math.abs(min) % 10));
         } else {
             let rounded = Math.round(max * 2) / 2;
             if(rounded > max) max = rounded;
@@ -77,6 +77,7 @@ export function BarChart({ live, labels, axis, axisColor, width, height, childre
     });
 
     return (<>
+        Max: {maxValue} Min: {minValue}
         {childrenProps}
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
