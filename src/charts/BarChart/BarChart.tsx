@@ -42,7 +42,7 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
         });
 
         const range = max - min;
-        if(range > 5) {
+        if(range > 1) {
             if(min > 0) min = 0;
             if(max % 10) max += 10 - (max % 10);
             if(min % 10) min -= (min % 10);
