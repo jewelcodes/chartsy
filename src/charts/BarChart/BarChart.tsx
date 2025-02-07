@@ -7,8 +7,8 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ width, height, children }: Readonly<{ children: ReactNode,
-    width?: number, height?: number }>) {
+export function BarChart({ interactive, width, height, children }: Readonly<{ children: ReactNode,
+    width?: number, height?: number, interactive?: boolean }>) {
 
     type Data = {
         label: string;
