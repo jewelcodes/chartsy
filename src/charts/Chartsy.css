@@ -9,6 +9,7 @@
     display: block;
     user-select: none;
     cursor: default;
+    line-height: 1em;
 }
 
 .chartsy-container * {
