@@ -7,8 +7,8 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, width, height, children }: Readonly<{ children: ReactNode,
-    width?: number, height?: number, live?: boolean }>) {
+export function BarChart({ live, labels, width, height, children }: Readonly<{ children: ReactNode,
+    width?: number, height?: number, live?: boolean, labels?: boolean }>) {
 
     type Data = {
         label: string;
@@ -77,11 +77,13 @@ export function BarChart({ live, width, height, children }: Readonly<{ children:
         {childrenProps}
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
-            height: `${height||40}vh` }}>
+            height: `${height||40}vh`,
+            marginBottom: labels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%` }}>
                 {Object.keys(data).map((label) => (
-                    <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>
+                    <div className="chartsy-bar-column" key={label}
+                        style={{ gap: `${(15 / data[label].values.length)}%` }}>
                         {data[label].values.map(([value, color]) => (
                             <div className="chartsy-bar" style={{
                                 height: `${(value - minValue) / (maxValue - minValue) * 100}%`,
@@ -89,6 +91,7 @@ export function BarChart({ live, width, height, children }: Readonly<{ children:
                                 backgroundColor: color,
                             }} />
                         ))}
+                        {labels && <span className="chartsy-bar-label">{label}</span>}
                     </div>
                 ))}
             </div>
