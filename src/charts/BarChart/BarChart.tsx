@@ -78,7 +78,8 @@ export function BarChart({ interactive, width, height, children }: Readonly<{ ch
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh` }}>
-            <div className="chartsy-bar-chart" style={{ gap: `${10 / Object.keys(data).length}%` }}>
+            <div className={`chartsy-bar-chart ${interactive ? "chartsy-bar-interactive" : ""}`}
+                style={{ gap: `${10 / Object.keys(data).length}%` }}>
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label} style={{ gap: `${(15 / data[label].values.length)}%` }}>
                         {data[label].values.map(([value, color]) => (
