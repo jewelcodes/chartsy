@@ -82,10 +82,11 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
 
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
-            marginBottom: ylabels ? "2em" : "0" }}>
+            marginBottom: xlabels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%`,
-                borderColor: axis ? axisColor || "red" : "transparent" }}>
+                borderColor: axis ? axisColor || "red" : "transparent",
+                marginLeft: ylabels ? "5em" : "0" }}>
 
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
@@ -97,7 +98,7 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
                                 backgroundColor: color,
                             }} />
                         ))}
-                        {ylabels && <span className="chartsy-bar-label">{label}</span>}
+                        {xlabels && <span className="chartsy-bar-label">{label}</span>}
                     </div> /* chartsy-bar-column */
                 ))}
 
