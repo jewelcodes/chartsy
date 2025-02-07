@@ -41,6 +41,9 @@ export function BarChart({ width, height, children }: Readonly<{ children: React
             });
         });
 
+        max *= 1.15;
+        min *= 0.85;
+
         const range = max - min;
         if(range > 1) {
             if(min > 0) min = 0;
