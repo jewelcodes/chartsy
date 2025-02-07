@@ -7,9 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, labels, width, height, children }: Readonly<{
+export function BarChart({ live, labels, axis, width, height, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
-    labels?: boolean }>) {
+    axis?: boolean, labels?: boolean }>) {
 
     type Data = {
         label: string;
