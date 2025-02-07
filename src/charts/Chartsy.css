@@ -7,6 +7,8 @@
     position: relative;
     box-sizing: border-box;
     display: block;
+    user-select: none;
+    cursor: default;
 }
 
 .chartsy-container * {
