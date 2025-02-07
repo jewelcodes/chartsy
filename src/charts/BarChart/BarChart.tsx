@@ -98,7 +98,7 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
                                 backgroundColor: color,
                             }} />
                         ))}
-                        {xlabels && <span className="chartsy-bar-label">{label}</span>}
+                        {xlabels && <span className="chartsy-bar-xlabel">{label}</span>}
                     </div> /* chartsy-bar-column */
                 ))}
 

@@ -30,7 +30,7 @@
     position: relative;
 }
 
-.chartsy-bar-label {
+.chartsy-bar-xlabel {
     position: absolute;
     top: calc(100% + 1em);
     text-align: center;
