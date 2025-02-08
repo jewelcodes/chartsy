@@ -3,18 +3,15 @@
  * Omar Elghoul, 2025
  */
 
-"use client";
-"use strict";
-
 import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
 export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
-    width, height, xgrid, gridColor, children }: Readonly<{
+    width, height, xgrid, gridColor, rounded, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
     axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
-    labelColor?: string, xgrid?: boolean, gridColor?: string }>) {
+    labelColor?: string, xgrid?: boolean, gridColor?: string, rounded?: number }>) {
 
     type Data = {
         label: string;
@@ -96,9 +93,8 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     });
 
     const range = maxValue - minValue;
-    let stepCount = Math.ceil(range / 10);
-    if(stepCount > 10) stepCount = 10;
-    if(stepCount < 2) stepCount = 5;
+    let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
+    if(stepCount > 10) stepCount = 5;
     const stepSize = range / stepCount;
 
     const steps = Array.from({length: stepCount + 1}, (_, i) => minValue + i * stepSize);
@@ -109,13 +105,16 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
         <div className="chartsy-container" style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
             marginBottom: xlabels ? "2em" : "0" }}>
-            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""} 
-                ${ylabels ? "chartsy-bar-has-ylabels" : ""}`}
+            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live " : ""} 
+                ${ylabels ? "chartsy-bar-has-ylabels " : ""}
+                ${rounded === 1 ? "chartsy-bar-rounded-small " :
+                    rounded === 2 ? "chartsy-bar-rounded-medium " :
+                    rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
                 style={{ gap: `${Math.round(10 / Object.keys(data).length)}%`,
                 borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
                 
                 {ylabels && steps.map((step) => (
-                    <span key={step} className="chartsy-bar-ylabel" style={{
+                    <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
                         color: labelColor || "inherit",
                     }}>
