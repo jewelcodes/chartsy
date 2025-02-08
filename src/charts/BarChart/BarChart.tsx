@@ -106,7 +106,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
             height: `${height||40}vh`,
             marginBottom: xlabels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""} 
-                ${axis ? "chartsy-bar-axis" : ""}`}
+                ${ylabels ? "chartsy-bar-has-ylabels" : ""}`}
                 style={{ gap: `${10 / Object.keys(data).length}%`,
                 borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
                 

@@ -16,7 +16,7 @@
     padding: 0 1em;
 }
 
-.chartsy-bar-axis {
+.chartsy-bar-has-ylabels {
     margin-left: var(--left-margin)
 }
 
