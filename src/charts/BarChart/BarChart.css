@@ -4,7 +4,11 @@
  */
 
 .chartsy-bar-chart {
-    --left-margin: 5em;
+    --chartsy-left-margin: 5em;
+    --chartsy-rounded-small: 0.2rem;
+    --chartsy-rounded-medium: 0.5rem;
+    --chartsy-rounded-large: 1rem;
+
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -17,12 +21,12 @@
 }
 
 .chartsy-bar-has-ylabels {
-    margin-left: var(--left-margin)
+    margin-left: var(--chartsy-left-margin)
 }
 
 .chartsy-bar-has-ylabels .chartsy-xgrid {
     left: var(--left-margin);
-    width: calc(100% - var(--left-margin));
+    width: calc(100% - var(--chartsy-left-margin));
 }
 
 .chartsy-bar-column {
@@ -34,11 +38,24 @@
 }
 
 .chartsy-bar {
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
     width: 100%;
     line-height: 0em;
     position: relative;
+}
+
+.chartsy-bar-rounded-small .chartsy-bar {
+    border-top-left-radius: var(--chartsy-rounded-small);
+    border-top-right-radius: var(--chartsy-rounded-small);
+}
+
+.chartsy-bar-rounded-medium .chartsy-bar {
+    border-top-left-radius: var(--chartsy-rounded-medium);
+    border-top-right-radius: var(--chartsy-rounded-medium);
+}
+
+.chartsy-bar-rounded-large .chartsy-bar {
+    border-top-left-radius: var(--chartsy-rounded-large);
+    border-top-right-radius: var(--chartsy-rounded-large);
 }
 
 .chartsy-bar-xlabel {
