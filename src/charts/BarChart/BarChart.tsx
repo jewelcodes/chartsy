@@ -98,6 +98,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const range = maxValue - minValue;
     let stepCount = Math.ceil(range / 10);
     if(stepCount > 10) stepCount = 10;
+    if(stepCount < 5) stepCount = 5;
     const stepSize = range / stepCount;
 
     const steps = Array.from({length: stepCount + 1}, (_, i) => minValue + i * stepSize);
@@ -110,7 +111,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
             marginBottom: xlabels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live" : ""} 
                 ${ylabels ? "chartsy-bar-has-ylabels" : ""}`}
-                style={{ gap: `${10 / Object.keys(data).length}%`,
+                style={{ gap: `${Math.round(10 / Object.keys(data).length)}%`,
                 borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
                 
                 {ylabels && steps.map((step) => (
