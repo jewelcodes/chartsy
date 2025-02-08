@@ -3,6 +3,9 @@
  * Omar Elghoul, 2025
  */
 
+"use client";
+"use strict";
+
 import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
@@ -18,8 +21,12 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
 
     type Data = {
         label: string;
-        values: [number, string][];
-    }
+        values: [number, string, number][];
+    };
+
+    type Hidden = {
+        [key: number]: boolean;
+    };
 
     type DataContainer = {
         [key: string]: Data;
@@ -28,15 +35,19 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const [data, setData] = useState<DataContainer>({});
     const [minValue, setMinValue] = useState<number>(0);
     const [maxValue, setMaxValue] = useState<number>(0);
+    const [hiddenSeries, setHiddenSeries] = useState<Hidden>({});
 
     const callback = (series: number, label: string, value: number, color: string, hidden: boolean) => {
+        let newHidden = new Object(hiddenSeries) as Hidden;
+        newHidden[series] = hidden;
+
         let newData = new Object(data) as DataContainer;
         if(newData[label]) {
-            newData[label].values.push([value, color]);
+            newData[label].values.push([value, color, series]);
         } else {
             newData[label] = new Object() as Data;
             newData[label].label = label;
-            newData[label].values = [[value, color]];
+            newData[label].values = [[value, color, series]];
         }
 
         let max = -Infinity, min = Infinity;
@@ -85,12 +96,20 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
         setMaxValue(max);
         setMinValue(min);
         setData(newData);
+        setHiddenSeries(newHidden);
+    };
+
+    const updateHidden = (series: number, hidden: boolean) => {
+        let newHidden = new Object(hiddenSeries) as Hidden;
+        newHidden[series] = hidden;
+        setHiddenSeries(newHidden);
     };
 
     const childrenProps = React.Children.map(children, (child) => {
         if(React.isValidElement(child)) {
-            return React.cloneElement(child as React.ReactElement<{ callback: Callback }>,
-                { callback: callback });
+            return React.cloneElement(child as React.ReactElement<{ callback: Callback,
+                updateHidden: (series: number, hidden: boolean) => void}>,
+                { callback: callback, updateHidden: updateHidden });
         }
     });
 
@@ -134,12 +153,12 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>
-                        {data[label].values.map(([value, color]) => (
+                        {data[label].values.map(([value, color, series]) => (
                             <div className="chartsy-bar" style={{
-                                height: `${(value-minValue) / (maxValue-minValue) * 100}%`,
-                                top: `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
+                                height: hiddenSeries[series] === true ? '0' : `${(value-minValue) / (maxValue-minValue) * 100}%`,
+                                top: hiddenSeries[series] === true ? "100%" : `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
                                 backgroundColor: color,
-                            }} />
+                            }} key={`${series}-${value}`} />
                         ))}
                         {xlabels && <span className="chartsy-bar-xlabel" style={{
                             color: labelColor || "inherit" }}>
@@ -166,10 +185,10 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
-            callback && callback(series, label, value, color||"#888", hidden||false);
+            callback && callback(series, label, value, color||"#888", hidden? true : false);
         });
-    } else {
-        updateHidden && updateHidden(series, hidden || false);
+    } else if(updateHidden) {
+        updateHidden(series, hidden? true : false);
     }
 
     return null;
