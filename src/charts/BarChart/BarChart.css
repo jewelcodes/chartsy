@@ -53,6 +53,7 @@
     text-overflow: clip;
     overflow: hidden;
     font-size: smaller;
+    transform: translateY(-0.5em);
 }
 
 .chartsy-bar-live:hover .chartsy-bar-column:not(:hover) {
