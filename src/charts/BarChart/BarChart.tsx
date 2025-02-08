@@ -3,6 +3,9 @@
  * Omar Elghoul, 2025
  */
 
+"use client";
+"use strict";
+
 import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
