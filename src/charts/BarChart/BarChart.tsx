@@ -8,10 +8,10 @@ import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
 export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
-    width, height, xgrid, children }: Readonly<{
+    width, height, xgrid, gridColor, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
     axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
-    labelColor?: string, xgrid?: boolean }>) {
+    labelColor?: string, xgrid?: boolean, gridColor?: string }>) {
 
     type Data = {
         label: string;
@@ -122,7 +122,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                 {xgrid && steps.map((step) => (
                     <div key={step} className="chartsy-xgrid" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-                        backgroundColor: "#d8d8d840"
+                        backgroundColor: gridColor || "#d8d8d840"
                     }} />
                 ))}
 
