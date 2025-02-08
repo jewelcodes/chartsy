@@ -8,6 +8,7 @@
     box-sizing: border-box;
     display: block;
     user-select: none;
+    -webkit-user-select: none;
     cursor: default;
     line-height: 1em;
 }
