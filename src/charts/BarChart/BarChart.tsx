@@ -156,9 +156,10 @@ export function BarDataSeries({data, color, hidden, callback}: Readonly<{
 
     const [called, setCalled] = useState(false);
 
-    if(!hidden && !called) {
+    if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
+            if(hidden) value = 0;
             callback && callback(label, value, color || "#888");
         });
     }
