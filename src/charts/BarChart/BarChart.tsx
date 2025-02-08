@@ -151,14 +151,15 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     </>);
 }
 
-export function BarDataSeries({data, color, hidden, callback}: Readonly<{
+export function BarDataSeries({data, color, hidden, updateHidden, callback}: Readonly<{
     data: Array<{label: string, value: number}>,
     color?: string,
     hidden?: boolean,
-    callback?: (series: number, label: string, value: number, color: string) => void }>) {
+    callback?: (series: number, label: string, value: number, color: string) => void,
+    updateHidden?: (series: number, hidden: boolean) => void }>) {
 
     const [called, setCalled] = useState(false);
-    const [series, setSeries] = useState(Math.round(Math.random() * 1000000));
+    const [series, _] = useState(Math.round(Math.random() * 1000000));
 
     if(!called) {
         setCalled(true);
@@ -166,6 +167,8 @@ export function BarDataSeries({data, color, hidden, callback}: Readonly<{
             if(hidden) value = 0;
             callback && callback(series, label, value, color || "#888");
         });
+    } else {
+        updateHidden && updateHidden(series, hidden || false);
     }
 
     return null;
