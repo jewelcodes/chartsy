@@ -119,6 +119,13 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                     </span>
                 ))}
 
+                {xgrid && steps.map((step) => (
+                    <div key={step} className="chartsy-xgrid" style={{
+                        top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
+                        backgroundColor: "#d8d8d840"
+                    }} />
+                ))}
+
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>

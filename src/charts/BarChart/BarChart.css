@@ -20,6 +20,11 @@
     margin-left: var(--left-margin)
 }
 
+.chartsy-bar-has-ylabels .chartsy-xgrid {
+    left: var(--left-margin);
+    width: calc(100% - var(--left-margin));
+}
+
 .chartsy-bar-column {
     display: flex;
     flex-direction: row;
