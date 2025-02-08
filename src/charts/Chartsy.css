@@ -16,3 +16,12 @@
     transition: all 0.2s ease-in-out;
     box-sizing: border-box !important;
 }
+
+.chartsy-xgrid {
+    position: absolute;
+    display: block;
+    height: 1px;
+    width: 100%;
+    left: 0;
+    width: 100%;
+}
