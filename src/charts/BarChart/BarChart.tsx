@@ -7,6 +7,9 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
+type Callback = (series: number, label: string, value: number,
+    color: string, hidden: boolean) => void;
+
 export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     width, height, xgrid, gridColor, rounded, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
@@ -26,7 +29,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const [minValue, setMinValue] = useState<number>(0);
     const [maxValue, setMaxValue] = useState<number>(0);
 
-    const callback = (series: number, label: string, value: number, color: string) => {
+    const callback = (series: number, label: string, value: number, color: string, hidden: boolean) => {
         let newData = new Object(data) as DataContainer;
         if(newData[label]) {
             newData[label].values.push([value, color]);
@@ -86,8 +89,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
 
     const childrenProps = React.Children.map(children, (child) => {
         if(React.isValidElement(child)) {
-            return React.cloneElement(child as React.ReactElement<{ callback:
-                (series: number, label: string, value: number, color: string) => void }>,
+            return React.cloneElement(child as React.ReactElement<{ callback: Callback }>,
                 { callback: callback });
         }
     });
@@ -155,7 +157,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     data: Array<{label: string, value: number}>,
     color?: string,
     hidden?: boolean,
-    callback?: (series: number, label: string, value: number, color: string) => void,
+    callback?: Callback,
     updateHidden?: (series: number, hidden: boolean) => void }>) {
 
     const [called, setCalled] = useState(false);
@@ -164,8 +166,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
-            if(hidden) value = 0;
-            callback && callback(series, label, value, color || "#888");
+            callback && callback(series, label, value, color||"#888", hidden||false);
         });
     } else {
         updateHidden && updateHidden(series, hidden || false);
