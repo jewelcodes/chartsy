@@ -98,7 +98,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const range = maxValue - minValue;
     let stepCount = Math.ceil(range / 10);
     if(stepCount > 10) stepCount = 10;
-    if(stepCount < 5) stepCount = 5;
+    if(stepCount < 2) stepCount = 5;
     const stepSize = range / stepCount;
 
     const steps = Array.from({length: stepCount + 1}, (_, i) => minValue + i * stepSize);
