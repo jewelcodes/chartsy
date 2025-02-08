@@ -8,10 +8,10 @@ import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
 export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
-    width, height, children }: Readonly<{
+    width, height, xgrid, ygrid, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
     axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
-    labelColor?: string }>) {
+    labelColor?: string, xgrid?: boolean, ygrid?: boolean }>) {
 
     type Data = {
         label: string;
