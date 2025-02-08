@@ -26,7 +26,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const [minValue, setMinValue] = useState<number>(0);
     const [maxValue, setMaxValue] = useState<number>(0);
 
-    const callback = (label: string, value: number, color: string) => {
+    const callback = (series: number, label: string, value: number, color: string) => {
         let newData = new Object(data) as DataContainer;
         if(newData[label]) {
             newData[label].values.push([value, color]);
@@ -87,7 +87,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const childrenProps = React.Children.map(children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{ callback:
-                (label: string, value: number, color: string) => void }>,
+                (series: number, label: string, value: number, color: string) => void }>,
                 { callback: callback });
         }
     });
@@ -155,15 +155,16 @@ export function BarDataSeries({data, color, hidden, callback}: Readonly<{
     data: Array<{label: string, value: number}>,
     color?: string,
     hidden?: boolean,
-    callback?: (label: string, value: number, color: string) => void }>) {
+    callback?: (series: number, label: string, value: number, color: string) => void }>) {
 
     const [called, setCalled] = useState(false);
+    const [series, setSeries] = useState(Math.round(Math.random() * 1000000));
 
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
             if(hidden) value = 0;
-            callback && callback(label, value, color || "#888");
+            callback && callback(series, label, value, color || "#888");
         });
     }
 
