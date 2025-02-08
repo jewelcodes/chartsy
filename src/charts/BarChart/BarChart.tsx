@@ -115,7 +115,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
                         color: labelColor || "inherit",
                     }}>
-                        {!step || step > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
+                        {step === 0 || step > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
                     </span>
                 ))}
 
@@ -129,7 +129,8 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                                 backgroundColor: color,
                             }} />
                         ))}
-                        {xlabels && <span className="chartsy-bar-xlabel" style={{ color: labelColor || "inherit" }}>
+                        {xlabels && <span className="chartsy-bar-xlabel" style={{
+                            color: labelColor || "inherit" }}>
                             {label}
                         </span>}
                     </div> /* chartsy-bar-column */
