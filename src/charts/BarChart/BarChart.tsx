@@ -7,9 +7,11 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
-export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, height, children }: Readonly<{
+export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
+    width, height, children }: Readonly<{
     children: ReactNode, width?: number, height?: number, live?: boolean,
-    axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean }>) {
+    axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
+    labelColor?: string }>) {
 
     type Data = {
         label: string;
@@ -111,8 +113,9 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
                 {ylabels && steps.map((step) => (
                     <span key={step} className="chartsy-bar-ylabel" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
+                        color: labelColor || "inherit",
                     }}>
-                        {step.toLocaleString()}
+                        {!step || step > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
                     </span>
                 ))}
 
@@ -126,7 +129,9 @@ export function BarChart({ live, xlabels, ylabels, axis, axisColor, width, heigh
                                 backgroundColor: color,
                             }} />
                         ))}
-                        {xlabels && <span className="chartsy-bar-xlabel">{label}</span>}
+                        {xlabels && <span className="chartsy-bar-xlabel" style={{ color: labelColor || "inherit" }}>
+                            {label}
+                        </span>}
                     </div> /* chartsy-bar-column */
                 ))}
 
