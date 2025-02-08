@@ -115,7 +115,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
                         color: labelColor || "inherit",
                     }}>
-                        {step === 0 || step > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
+                        {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
                     </span>
                 ))}
 
