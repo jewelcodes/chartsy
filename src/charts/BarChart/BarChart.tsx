@@ -101,8 +101,8 @@ export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axi
         if(!hidden && !hiddenSeries.includes(series)) return;
 
         let newHidden = hiddenSeries.slice();
-        if(hidden && !newHidden.includes(series)) newHidden.push(series);
-        else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
+        if(hidden) newHidden.push(series);
+        else if(!hidden) newHidden.splice(newHidden.indexOf(series), 1);
         setHiddenSeries(newHidden);
     };
 
@@ -190,10 +190,10 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
-            callback && callback(series, label, value, color||"#888", hidden? true : false);
+            callback && callback(series, label, value, color||"#888", hidden||false);
         });
     } else if(updateHidden) {
-        updateHidden(series, hidden? true : false);
+        updateHidden(series, hidden||false);
     }
 
     return null;
