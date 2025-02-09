@@ -35,12 +35,14 @@
     flex-wrap: nowrap;
     width: 100%;
     position: relative;
+    transition: opacity var(--chartsy-opacity-duration, 0) ease-in-out;
 }
 
 .chartsy-bar {
     width: 100%;
     line-height: 0em;
     position: relative;
+    transition: height var(--chartsy-bar-duration, 0) ease-in-out, top var(--chartsy-bar-duration, 0) ease-in-out;
 }
 
 .chartsy-bar-rounded-small .chartsy-bar {
