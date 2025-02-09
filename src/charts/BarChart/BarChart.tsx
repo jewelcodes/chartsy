@@ -24,10 +24,6 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
         values: [number, string, number][];
     };
 
-    type Hidden = {
-        [key: number]: boolean;
-    };
-
     type DataContainer = {
         [key: string]: Data;
     };
@@ -35,11 +31,12 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     const [data, setData] = useState<DataContainer>({});
     const [minValue, setMinValue] = useState<number>(0);
     const [maxValue, setMaxValue] = useState<number>(0);
-    const [hiddenSeries, setHiddenSeries] = useState<Hidden>({});
+    const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
 
     const callback = (series: number, label: string, value: number, color: string, hidden: boolean) => {
-        let newHidden = new Object(hiddenSeries) as Hidden;
-        newHidden[series] = hidden;
+        let newHidden = hiddenSeries.slice();
+        if(hidden && !newHidden.includes(series)) newHidden.push(series);
+        else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
 
         let newData = new Object(data) as DataContainer;
         if(newData[label]) {
@@ -100,8 +97,12 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     };
 
     const updateHidden = (series: number, hidden: boolean) => {
-        let newHidden = new Object(hiddenSeries) as Hidden;
-        newHidden[series] = hidden;
+        if(hidden && hiddenSeries.includes(series)) return;
+        if(!hidden && !hiddenSeries.includes(series)) return;
+
+        let newHidden = hiddenSeries.slice();
+        if(hidden && !newHidden.includes(series)) newHidden.push(series);
+        else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
         setHiddenSeries(newHidden);
     };
 
@@ -155,8 +156,8 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>
                         {data[label].values.map(([value, color, series]) => (
                             <div className="chartsy-bar" style={{
-                                height: hiddenSeries[series] === true ? '0' : `${(value-minValue) / (maxValue-minValue) * 100}%`,
-                                top: hiddenSeries[series] === true ? "100%" : `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
+                                height: hiddenSeries.includes(series) ? "0" : `${(value-minValue) / (maxValue-minValue) * 100}%`,
+                                top: hiddenSeries.includes(series) ? "100%" : `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
                                 backgroundColor: color,
                             }} key={`${series}-${value}`} />
                         ))}
