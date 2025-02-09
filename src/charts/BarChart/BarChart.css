@@ -42,7 +42,8 @@
     width: 100%;
     line-height: 0em;
     position: relative;
-    transition: height var(--chartsy-bar-duration, 0) ease-in-out, top var(--chartsy-bar-duration, 0) ease-in-out;
+    transition: height var(--chartsy-data-duration, 0) ease-in-out,
+        top var(--chartsy-data-duration, 0) ease-in-out;
 }
 
 .chartsy-bar-rounded-small .chartsy-bar {
