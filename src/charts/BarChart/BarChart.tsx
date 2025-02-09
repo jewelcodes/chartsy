@@ -124,7 +124,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     return (<>
         {childrenProps}
 
-        <div className="chartsy-container" style={{ width: `${width||50}vw`,
+        <div className={`chartsy-container ${live ? "chartsy-container-live" : ""}`} style={{ width: `${width||50}vw`,
             height: `${height||40}vh`,
             marginBottom: xlabels ? "2em" : "0" }}>
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live " : ""} 
