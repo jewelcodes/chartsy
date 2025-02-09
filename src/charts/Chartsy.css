@@ -11,10 +11,10 @@
     -webkit-user-select: none;
     cursor: default;
     line-height: 1em;
+    text-align: left;
 }
 
 .chartsy-container * {
-    transition: all 0.2s ease-in-out;
     box-sizing: border-box !important;
 }
 
