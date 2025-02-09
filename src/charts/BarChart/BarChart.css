@@ -25,7 +25,7 @@
 }
 
 .chartsy-bar-has-ylabels .chartsy-xgrid {
-    left: var(--left-margin);
+    left: var(--chartsy-left-margin);
     width: calc(100% - var(--chartsy-left-margin));
 }
 
@@ -75,7 +75,7 @@
     position: absolute;
     left: 0;
     text-align: right;
-    width: var(--left-margin);
+    width: var(--chartsy-left-margin);
     text-overflow: clip;
     overflow: hidden;
     font-size: smaller;
