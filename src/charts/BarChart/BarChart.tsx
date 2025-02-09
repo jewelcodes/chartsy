@@ -27,16 +27,16 @@ export type BarChartProps = {
 };
 
 export type BarChartData = {
-    label: string;
+    label: string|number;
     value: number;
 };
 
-type Callback = (series: number, label: string, value: number,
+type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
     type Data = {
-        label: string;
+        label: string|number;
         values: [number, string, number][];
     };
 
@@ -49,7 +49,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const [maxValue, setMaxValue] = useState<number>(0);
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
 
-    const callback = (series: number, label: string, value: number, color: string, hidden: boolean) => {
+    const callback = (series: number, label: string|number, value: number, color: string, hidden: boolean) => {
         let newHidden = hiddenSeries.slice();
         if(hidden && !newHidden.includes(series)) newHidden.push(series);
         else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
