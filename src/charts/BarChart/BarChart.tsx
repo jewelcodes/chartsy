@@ -10,15 +10,26 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState } from "react";
 
+export type BarChartProps = {
+    children: ReactNode;
+    live?: boolean;
+    toggle?: boolean;
+    xlabels?: boolean;
+    ylabels?: boolean;
+    labelColor?: string;
+    axis?: boolean;
+    axisColor?: string;
+    width?: number;
+    height?: number;
+    xgrid?: boolean;
+    gridColor?: string;
+    rounded?: number;
+};
+
 type Callback = (series: number, label: string, value: number,
     color: string, hidden: boolean) => void;
 
-export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axisColor,
-    width, height, xgrid, gridColor, rounded, children }: Readonly<{
-    children: ReactNode, width?: number, height?: number, live?: boolean, toggle?: boolean,
-    axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
-    labelColor?: string, xgrid?: boolean, gridColor?: string, rounded?: number }>) {
-
+export function BarChart({ ...props }: Readonly<BarChartProps>) {
     type Data = {
         label: string;
         values: [number, string, number][];
@@ -106,7 +117,7 @@ export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axi
         setHiddenSeries(newHidden);
     };
 
-    const childrenProps = React.Children.map(children, (child) => {
+    const childrenProps = React.Children.map(props.children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{ callback: Callback,
                 updateHidden: (series: number, hidden: boolean) => void}>,
@@ -124,32 +135,32 @@ export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axi
     return (<>
         {childrenProps}
 
-        <div className={`chartsy-container ${toggle ? "chartsy-container-toggle" : ""}`}
-            style={{ width: `${width||50}vw`,
-                height: `${height||40}vh`,
-                marginBottom: xlabels ? "2em" : "0" }}>
+        <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
+            style={{ width: `${props.width||50}vw`,
+                height: `${props.height||40}vh`,
+                marginBottom: props.xlabels ? "2em" : "0" }}>
 
-            <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live " : ""} 
-                ${ylabels ? "chartsy-bar-has-ylabels " : ""}
-                ${rounded === 1 ? "chartsy-bar-rounded-small " :
-                    rounded === 2 ? "chartsy-bar-rounded-medium " :
-                    rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
+            <div className={`chartsy-bar-chart ${props.live ? "chartsy-bar-live " : ""} 
+                ${props.ylabels ? "chartsy-bar-has-ylabels " : ""}
+                ${props.rounded === 1 ? "chartsy-bar-rounded-small " :
+                    props.rounded === 2 ? "chartsy-bar-rounded-medium " :
+                    props.rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
                 style={{ gap: `${Math.round(20 / Object.keys(data).length)}%`,
-                borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
+                borderColor: props.axis ? props.axisColor || "#ccc" : "transparent" }}>
                 
-                {ylabels && steps.map((step) => (
+                {props.ylabels && steps.map((step) => (
                     <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-                        color: labelColor || "inherit",
+                        color: props.labelColor || "inherit",
                     }}>
                         {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
                     </span>
                 ))}
 
-                {xgrid && steps.map((step) => (
+                {props.xgrid && steps.map((step) => (
                     <div key={step} className="chartsy-xgrid" style={{
                         top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-                        backgroundColor: gridColor || "#d8d8d840"
+                        backgroundColor: props.gridColor || "#d8d8d840"
                     }} />
                 ))}
 
@@ -165,8 +176,8 @@ export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axi
                                 backgroundColor: color,
                             }} key={`${series}-${value}`} />
                         ))}
-                        {xlabels && <span className="chartsy-bar-xlabel" style={{
-                            color: labelColor || "inherit" }}>
+                        {props.xlabels && <span className="chartsy-bar-xlabel" style={{
+                            color: props.labelColor || "inherit" }}>
                             {label}
                         </span>}
                     </div> /* chartsy-bar-column */
