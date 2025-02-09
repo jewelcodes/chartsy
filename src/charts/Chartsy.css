@@ -18,6 +18,11 @@
     box-sizing: border-box !important;
 }
 
+.chartsy-container-live {
+    --chartsy-opacity-duration: 0.2s;
+    --chartsy-data-duration: 0.5s;
+}
+
 .chartsy-xgrid {
     position: absolute;
     display: block;
