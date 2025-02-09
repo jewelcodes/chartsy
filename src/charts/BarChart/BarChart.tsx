@@ -26,6 +26,11 @@ export type BarChartProps = {
     rounded?: number;
 };
 
+export type BarChartData = {
+    label: string;
+    value: number;
+};
+
 type Callback = (series: number, label: string, value: number,
     color: string, hidden: boolean) => void;
 
@@ -189,7 +194,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 }
 
 export function BarDataSeries({data, color, hidden, updateHidden, callback}: Readonly<{
-    data: Array<{label: string, value: number}>,
+    data: Array<BarChartData>,
     color?: string,
     hidden?: boolean,
     callback?: Callback,
