@@ -13,9 +13,9 @@ import React, { ReactNode, useState } from "react";
 type Callback = (series: number, label: string, value: number,
     color: string, hidden: boolean) => void;
 
-export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
+export function BarChart({ live, toggle, xlabels, ylabels, labelColor, axis, axisColor,
     width, height, xgrid, gridColor, rounded, children }: Readonly<{
-    children: ReactNode, width?: number, height?: number, live?: boolean,
+    children: ReactNode, width?: number, height?: number, live?: boolean, toggle?: boolean,
     axis?: boolean, axisColor?: string, xlabels?: boolean, ylabels?: boolean,
     labelColor?: string, xgrid?: boolean, gridColor?: string, rounded?: number }>) {
 
@@ -124,7 +124,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     return (<>
         {childrenProps}
 
-        <div className={`chartsy-container ${live ? "chartsy-container-live" : ""}`}
+        <div className={`chartsy-container ${toggle ? "chartsy-container-toggle" : ""}`}
             style={{ width: `${width||50}vw`,
                 height: `${height||40}vh`,
                 marginBottom: xlabels ? "2em" : "0" }}>
