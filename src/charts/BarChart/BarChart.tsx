@@ -132,7 +132,7 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                 ${rounded === 1 ? "chartsy-bar-rounded-small " :
                     rounded === 2 ? "chartsy-bar-rounded-medium " :
                     rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
-                style={{ gap: `${Math.round(10 / Object.keys(data).length)}%`,
+                style={{ gap: `${Math.round(20 / Object.keys(data).length)}%`,
                 borderColor: axis ? axisColor || "#ccc" : "transparent" }}>
                 
                 {ylabels && steps.map((step) => (
