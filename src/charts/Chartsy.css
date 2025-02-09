@@ -4,6 +4,8 @@
  */
 
 .chartsy-container {
+    --chartsy-opacity-duration: 0.2s;
+
     position: relative;
     box-sizing: border-box;
     display: block;
@@ -14,13 +16,12 @@
     text-align: left;
 }
 
-.chartsy-container * {
-    box-sizing: border-box !important;
+.chartsy-container-toggle {
+    --chartsy-data-duration: 0.4s;
 }
 
-.chartsy-container-live {
-    --chartsy-opacity-duration: 0.2s;
-    --chartsy-data-duration: 0.5s;
+.chartsy-container * {
+    box-sizing: border-box !important;
 }
 
 .chartsy-xgrid {
