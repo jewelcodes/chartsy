@@ -124,9 +124,11 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
     return (<>
         {childrenProps}
 
-        <div className={`chartsy-container ${live ? "chartsy-container-live" : ""}`} style={{ width: `${width||50}vw`,
-            height: `${height||40}vh`,
-            marginBottom: xlabels ? "2em" : "0" }}>
+        <div className={`chartsy-container ${live ? "chartsy-container-live" : ""}`}
+            style={{ width: `${width||50}vw`,
+                height: `${height||40}vh`,
+                marginBottom: xlabels ? "2em" : "0" }}>
+
             <div className={`chartsy-bar-chart ${live ? "chartsy-bar-live " : ""} 
                 ${ylabels ? "chartsy-bar-has-ylabels " : ""}
                 ${rounded === 1 ? "chartsy-bar-rounded-small " :
@@ -156,8 +158,10 @@ export function BarChart({ live, xlabels, ylabels, labelColor, axis, axisColor,
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>
                         {data[label].values.map(([value, color, series]) => (
                             <div className="chartsy-bar" style={{
-                                height: hiddenSeries.includes(series) ? "0" : `${(value-minValue) / (maxValue-minValue) * 100}%`,
-                                top: hiddenSeries.includes(series) ? "100%" : `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
+                                height: hiddenSeries.includes(series) ? "0" :
+                                    `${(value-minValue) / (maxValue-minValue) * 100}%`,
+                                top: hiddenSeries.includes(series) ? "100%" :
+                                    `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
                                 backgroundColor: color,
                             }} key={`${series}-${value}`} />
                         ))}
