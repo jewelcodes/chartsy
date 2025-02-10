@@ -8,7 +8,7 @@
 
 import "./BarChart.css";
 import "../Chartsy.css";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useMemo } from "react";
 
 export type BarChartProps = {
     children: ReactNode;
@@ -131,12 +131,14 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         }
     });
 
-    const range = maxValue - minValue;
-    let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
-    if(stepCount > 10) stepCount = 5;
-    const stepSize = range / stepCount;
+    const steps = useMemo(() => {
+        const range = maxValue - minValue;
+        let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
+        if(stepCount > 10) stepCount = 5;
+        const stepSize = range / stepCount;
 
-    const steps = Array.from({length: stepCount + 1}, (_, i) => minValue + i * stepSize);
+        return Array.from({length: stepCount+1}, (_, i) => minValue + i * stepSize);
+    }, [minValue, maxValue]);
 
     return (<>
         {childrenProps}
