@@ -13,6 +13,7 @@ import React, { ReactNode, useState, useMemo } from "react";
 const COLUMN_GAP_PERCENT = 20;
 const SERIES_GAP_PERCENT = 15;
 const BOUNDARY_FACTOR = 0.1;
+const GRID_COLOR = "#d8d8d840";
 
 export type BarChartProps = {
     children: ReactNode;
@@ -39,7 +40,10 @@ type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
-    if(!props.children) return null;
+    if(!props.children) {
+        console.error("BarChart: at least one data series must be provided");
+        return null;
+    }
 
     type Data = {
         label: string|number;
@@ -157,7 +161,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const renderXGrid = () => props.xgrid && steps.map((step) => (
         <div key={step} className="chartsy-xgrid" style={{
             top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-            backgroundColor: props.gridColor || "#d8d8d840"
+            backgroundColor: props.gridColor || GRID_COLOR,
         }} />
     ));
 
@@ -215,7 +219,10 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     callback?: Callback,
     updateHidden?: (series: number, hidden: boolean) => void }>) {
 
-    if(!data || data.length === 0) return null;
+    if(!data || data.length === 0) {
+        console.error("BarDataSeries: no data was provided");
+        return null;
+    }
 
     const [called, setCalled] = useState(false);
     const [series, _] = useState(Math.round(Math.random() * 1000000));
