@@ -113,8 +113,10 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
             });
         });
 
-        max *= (1 + BOUNDARY_FACTOR);
-        min *= (1 - BOUNDARY_FACTOR);
+        if(max > 0) max *= (1 + BOUNDARY_FACTOR);
+        else max *= (1 - BOUNDARY_FACTOR);
+        if(min > 0) min *= (1 - BOUNDARY_FACTOR);
+        else min *= (1 + BOUNDARY_FACTOR);
 
         const range = max - min;
         if(range > 1) {
