@@ -36,6 +36,14 @@ export interface BarChartData {
     value: number;
 };
 
+export interface BarDataSeriesProps {
+    data?: BarChartData[];
+    color?: string;
+    hidden?: boolean;
+    callback?: Callback;
+    updateHidden?: HiddenCallback;
+};
+
 type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
@@ -215,14 +223,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     </>);
 }
 
-export function BarDataSeries({data, color, hidden, updateHidden, callback}: Readonly<{
-    data?: BarChartData[],
-    color?: string,
-    hidden?: boolean,
-    callback?: Callback,
-    updateHidden?: HiddenCallback}>) {
-
-    if(!data) {
+export function BarDataSeries({...props}: Readonly<BarDataSeriesProps>) {
+    if(!props.data) {
         console.error("BarDataSeries: no data was provided");
         return null;
     }
@@ -232,11 +234,13 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
 
     if(!called) {
         setCalled(true);
-        data.forEach(({label, value}) => {
-            callback && callback(series, label, value, color??"#888", hidden??false);
+        props.data.forEach(({label, value}) => {
+            props.callback && props.callback(series, label, value,
+                props.color??"#888",
+                props.hidden??false);
         });
-    } else if(updateHidden) {
-        updateHidden(series, hidden??false);
+    } else if(props.updateHidden) {
+        props.updateHidden(series, props.hidden??false);
     }
 
     return null;
