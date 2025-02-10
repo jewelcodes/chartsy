@@ -70,14 +70,13 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 
     const callback: Callback = (series, label, value, color, hidden) => {
         let newData = new Object(data) as DataContainer;
-        if(newData[label]) {
-            newData[label].values.push([value, color, series]);
-        } else {
+        if(!newData[label]) {
             newData[label] = new Object() as Data;
             newData[label].label = label;
-            newData[label].values = [[value, color, series]];
+            newData[label].values = [];
         }
-
+    
+        newData[label].values.push([value, color, series]);
         setData(newData);
         updateHidden(series, hidden, true);
     };
