@@ -15,7 +15,7 @@ const SERIES_GAP_PERCENT = 15;
 const BOUNDARY_FACTOR = 0.1;
 const GRID_COLOR = "#d8d8d840";
 
-export type BarChartProps = {
+export interface BarChartProps {
     children: ReactNode;
     live?: boolean;
     toggle?: boolean;
@@ -31,7 +31,7 @@ export type BarChartProps = {
     rounded?: number;
 };
 
-export type BarChartData = {
+export interface BarChartData {
     label: string|number;
     value: number;
 };
