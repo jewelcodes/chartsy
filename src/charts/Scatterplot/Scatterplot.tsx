@@ -31,3 +31,9 @@ export interface ScatterplotData {
     y: number;
 };
 
+type Callback = (series: number, x: number, y: number, connected: boolean,
+    color: string, hidden: boolean) => void;
+
+type HiddenCallback = (series: number, hidden: boolean) => void;
+type ConnectedCallback = (series: number, connected: boolean) => void;
+
