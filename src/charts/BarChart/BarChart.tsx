@@ -39,6 +39,8 @@ export type BarChartData = {
 type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
+type HiddenCallback = (series: number, hidden: boolean) => void;
+
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
     if(!props.children) {
         console.error("BarChart: at least one data series must be provided");
@@ -97,7 +99,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const childrenProps = React.Children.map(props.children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{ callback: Callback,
-                updateHidden: (series: number, hidden: boolean) => void}>,
+                updateHidden: HiddenCallback }>,
                 { callback: callback, updateHidden: updateHidden });
         }
     });
@@ -105,7 +107,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const { maxValue, minValue } = useMemo(() => {
         let max = -Infinity, min = Infinity;
         Object.keys(data).forEach((label) => {
-            data[label].values.forEach(([value, _]) => {
+            data[label].values.forEach(([value]) => {
                 if(value > max) max = value;
                 if(value < min) min = value;
             });
@@ -216,7 +218,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     color?: string,
     hidden?: boolean,
     callback?: Callback,
-    updateHidden?: (series: number, hidden: boolean) => void }>) {
+    updateHidden?: HiddenCallback}>) {
 
     if(!data || data.length === 0) {
         console.error("BarDataSeries: no data was provided");
@@ -224,7 +226,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     }
 
     const [called, setCalled] = useState(false);
-    const [series, _] = useState(Math.round(Math.random() * 1000000));
+    const [series] = useState(Math.round(Math.random() * 1000000));
 
     if(!called) {
         setCalled(true);
