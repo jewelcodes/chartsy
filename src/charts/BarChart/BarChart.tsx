@@ -39,6 +39,8 @@ type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
+    if(!props.children) return null;
+
     type Data = {
         label: string|number;
         values: [number, string, number][];
@@ -212,6 +214,8 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     hidden?: boolean,
     callback?: Callback,
     updateHidden?: (series: number, hidden: boolean) => void }>) {
+
+    if(!data || data.length === 0) return null;
 
     const [called, setCalled] = useState(false);
     const [series, _] = useState(Math.round(Math.random() * 1000000));
