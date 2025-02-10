@@ -47,12 +47,12 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         return null;
     }
 
-    type Data = {
+    interface Data {
         label: string|number;
         values: [number, string, number][];
     };
 
-    type DataContainer = {
+    interface DataContainer {
         [key: string]: Data;
     };
 
@@ -186,8 +186,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         {childrenProps}
 
         <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
-            style={{ width: `${props.width||50}vw`,
-                height: `${props.height||40}vh`,
+            style={{ width: `${props.width??50}vw`,
+                height: `${props.height??40}vh`,
                 marginBottom: props.xlabels ? "2em" : "0" }}>
 
             <div className={`chartsy-bar-chart ${props.live ? "chartsy-bar-live " : ""} 
@@ -214,7 +214,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 }
 
 export function BarDataSeries({data, color, hidden, updateHidden, callback}: Readonly<{
-    data: BarChartData[],
+    data?: BarChartData[],
     color?: string,
     hidden?: boolean,
     callback?: Callback,
@@ -234,7 +234,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
             callback && callback(series, label, value, color??"#888", hidden??false);
         });
     } else if(updateHidden) {
-        updateHidden(series, hidden||false);
+        updateHidden(series, hidden??false);
     }
 
     return null;
