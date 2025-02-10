@@ -31,9 +31,37 @@ export interface ScatterplotData {
     y: number;
 };
 
+export interface ScatterplotDataSeriesProps {
+    data?: ScatterplotData[];
+    color?: string;
+    hidden?: boolean;
+    connected?: boolean;
+    callback?: Callback;
+    updateHidden?: HiddenCallback;
+    updateConnected?: ConnectedCallback;
+};
+
 type Callback = (series: number, x: number, y: number, connected: boolean,
     color: string, hidden: boolean) => void;
 
 type HiddenCallback = (series: number, hidden: boolean) => void;
 type ConnectedCallback = (series: number, connected: boolean) => void;
 
+export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
+    if(!props.children) {
+        console.error("Scatterplot: at least one data series must be provided");
+        return null;
+    }
+
+    return null;
+}
+
+export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesProps>) {
+    if(!props.data) {
+        console.error("ScatterDataSeries: no data was provided");
+        return null;
+    }
+
+    /* stub */
+    return null;
+}
