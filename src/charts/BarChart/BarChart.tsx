@@ -45,8 +45,6 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     };
 
     const [data, setData] = useState<DataContainer>({});
-    const [minValue, setMinValue] = useState<number>(0);
-    const [maxValue, setMaxValue] = useState<number>(0);
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
 
     const adjustRange = (value: number, max: boolean) => {
@@ -74,9 +72,32 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
             newData[label].values = [[value, color, series]];
         }
 
+        setData(newData);
+        setHiddenSeries(newHidden);
+    };
+
+    const updateHidden = (series: number, hidden: boolean) => {
+        if(hidden && hiddenSeries.includes(series)) return;
+        if(!hidden && !hiddenSeries.includes(series)) return;
+
+        let newHidden = hiddenSeries.slice();
+        if(hidden) newHidden.push(series);
+        else if(!hidden) newHidden.splice(newHidden.indexOf(series), 1);
+        setHiddenSeries(newHidden);
+    };
+
+    const childrenProps = React.Children.map(props.children, (child) => {
+        if(React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<{ callback: Callback,
+                updateHidden: (series: number, hidden: boolean) => void}>,
+                { callback: callback, updateHidden: updateHidden });
+        }
+    });
+
+    const { maxValue, minValue } = useMemo(() => {
         let max = -Infinity, min = Infinity;
-        Object.keys(newData).forEach((label) => {
-            newData[label].values.forEach(([value, _]) => {
+        Object.keys(data).forEach((label) => {
+            data[label].values.forEach(([value, _]) => {
                 if(value > max) max = value;
                 if(value < min) min = value;
             });
@@ -107,29 +128,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         if(max >= 10) max = adjustRange(max, true);
         if(min <= -10) min = adjustRange(min, false);
 
-        setMaxValue(max);
-        setMinValue(min);
-        setData(newData);
-        setHiddenSeries(newHidden);
-    };
-
-    const updateHidden = (series: number, hidden: boolean) => {
-        if(hidden && hiddenSeries.includes(series)) return;
-        if(!hidden && !hiddenSeries.includes(series)) return;
-
-        let newHidden = hiddenSeries.slice();
-        if(hidden) newHidden.push(series);
-        else if(!hidden) newHidden.splice(newHidden.indexOf(series), 1);
-        setHiddenSeries(newHidden);
-    };
-
-    const childrenProps = React.Children.map(props.children, (child) => {
-        if(React.isValidElement(child)) {
-            return React.cloneElement(child as React.ReactElement<{ callback: Callback,
-                updateHidden: (series: number, hidden: boolean) => void}>,
-                { callback: callback, updateHidden: updateHidden });
-        }
-    });
+        return { maxValue: max, minValue: min };
+    }, [data, hiddenSeries]);
 
     const steps = useMemo(() => {
         const range = maxValue - minValue;
