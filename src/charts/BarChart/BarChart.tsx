@@ -49,7 +49,18 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const [maxValue, setMaxValue] = useState<number>(0);
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
 
-    const callback = (series: number, label: string|number, value: number, color: string, hidden: boolean) => {
+    const adjustRange = (value: number, max: boolean) => {
+        let factor = 1;
+        while(Math.abs(value) / factor > 10)
+            factor *= 10;
+        
+        if(factor >= 10) factor /= 2;
+        
+        if(max) return Math.ceil(value / factor) * factor;
+        return Math.floor(value / factor) * factor;
+    };
+
+    const callback: Callback = (series, label, value, color, hidden) => {
         let newHidden = hiddenSeries.slice();
         if(hidden && !newHidden.includes(series)) newHidden.push(series);
         else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
@@ -93,18 +104,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         }
 
         if(max === min) max++;
-
-        if(max > 1000000) max = Math.ceil(max / 500000) * 500000;
-        else if(max > 100000) max = Math.ceil(max / 50000) * 50000;
-        else if(max > 10000) max = Math.ceil(max / 5000) * 5000;
-        else if(max > 1000) max = Math.ceil(max / 500) * 500;
-        else if(max > 100) max = Math.ceil(max / 50) * 50;
-
-        if(min < -1000000) min = Math.floor(min / 500000) * 500000;
-        else if(min < -100000) min = Math.floor(min / 50000) * 50000;
-        else if(min < -10000) min = Math.floor(min / 5000) * 5000;
-        else if(min < -1000) min = Math.floor(min / 500) * 500;
-        else if(min < -100) min = Math.floor(min / 50) * 50;
+        if(max >= 10) max = adjustRange(max, true);
+        if(min <= -10) min = adjustRange(min, false);
 
         setMaxValue(max);
         setMinValue(min);
