@@ -10,6 +10,10 @@ import "./BarChart.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState, useMemo } from "react";
 
+const COLUMN_GAP_PERCENT = 20;
+const SERIES_GAP_PERCENT = 15;
+const BOUNDARY_FACTOR = 0.1;
+
 export type BarChartProps = {
     children: ReactNode;
     live?: boolean;
@@ -102,8 +106,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
             });
         });
 
-        max *= 1.1;
-        min *= 0.9;
+        max *= (1 + BOUNDARY_FACTOR);
+        min *= (1 - BOUNDARY_FACTOR);
 
         const range = max - min;
         if(range > 1) {
@@ -184,7 +188,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                 ${props.rounded === 1 ? "chartsy-bar-rounded-small " :
                     props.rounded === 2 ? "chartsy-bar-rounded-medium " :
                     props.rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
-                style={{ gap: `${Math.round(20 / Object.keys(data).length)}%`,
+                style={{ gap: `${Math.round(COLUMN_GAP_PERCENT / Object.keys(data).length)}%`,
                 borderColor: props.axis ? props.axisColor || "#ccc" : "transparent" }}>
                 
                 {renderYLabels()}
@@ -192,7 +196,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
-                        style={{ gap: `${(15 / data[label].values.length)}%` }}>
+                        style={{ gap: `${(SERIES_GAP_PERCENT / data[label].values.length)}%` }}>
                         {renderColumn(label)}
                         {renderXLabels(label)}
                     </div> /* chartsy-bar-column */
