@@ -92,7 +92,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 
         let newHidden = hiddenSeries.slice();
         if(hidden) newHidden.push(series);
-        else if(!hidden) newHidden.splice(newHidden.indexOf(series), 1);
+        else newHidden.splice(newHidden.indexOf(series), 1);
         setHiddenSeries(newHidden);
     };
 
@@ -153,7 +153,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const renderYLabels = () => props.ylabels && steps.map((step) => (
         <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
             top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-            color: props.labelColor || "inherit",
+            color: props.labelColor ?? "inherit",
         }}>
             {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
         </span>
@@ -162,12 +162,12 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const renderXGrid = () => props.xgrid && steps.map((step) => (
         <div key={step} className="chartsy-xgrid" style={{
             top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-            backgroundColor: props.gridColor || GRID_COLOR,
+            backgroundColor: props.gridColor ?? GRID_COLOR,
         }} />
     ));
 
     const renderXLabels = (label: string|number) => props.xlabels && (
-        <span className="chartsy-bar-xlabel" style={{color: props.labelColor || "inherit" }}>
+        <span className="chartsy-bar-xlabel" style={{color: props.labelColor ?? "inherit" }}>
             {label}
         </span>
     );
@@ -196,7 +196,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                     props.rounded === 2 ? "chartsy-bar-rounded-medium " :
                     props.rounded === 3 ? "chartsy-bar-rounded-large " : ""}`}
                 style={{ gap: `${Math.round(COLUMN_GAP_PERCENT / Object.keys(data).length)}%`,
-                borderColor: props.axis ? props.axisColor || "#ccc" : "transparent" }}>
+                borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent" }}>
                 
                 {renderYLabels()}
                 {renderXGrid()}
@@ -220,7 +220,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     callback?: Callback,
     updateHidden?: HiddenCallback}>) {
 
-    if(!data || data.length === 0) {
+    if(!data) {
         console.error("BarDataSeries: no data was provided");
         return null;
     }
@@ -231,7 +231,7 @@ export function BarDataSeries({data, color, hidden, updateHidden, callback}: Rea
     if(!called) {
         setCalled(true);
         data.forEach(({label, value}) => {
-            callback && callback(series, label, value, color||"#888", hidden||false);
+            callback && callback(series, label, value, color??"#888", hidden??false);
         });
     } else if(updateHidden) {
         updateHidden(series, hidden||false);
