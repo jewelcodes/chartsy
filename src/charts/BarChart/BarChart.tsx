@@ -59,10 +59,6 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     };
 
     const callback: Callback = (series, label, value, color, hidden) => {
-        let newHidden = hiddenSeries.slice();
-        if(hidden && !newHidden.includes(series)) newHidden.push(series);
-        else if(!hidden && newHidden.includes(series)) newHidden.splice(newHidden.indexOf(series), 1);
-
         let newData = new Object(data) as DataContainer;
         if(newData[label]) {
             newData[label].values.push([value, color, series]);
@@ -73,12 +69,15 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         }
 
         setData(newData);
-        setHiddenSeries(newHidden);
+        updateHidden(series, hidden, true);
     };
 
-    const updateHidden = (series: number, hidden: boolean) => {
-        if(hidden && hiddenSeries.includes(series)) return;
-        if(!hidden && !hiddenSeries.includes(series)) return;
+    const updateHidden = (series: number, hidden: boolean, force?:boolean) => {
+        if((hidden && hiddenSeries.includes(series)) || (!hidden && !hiddenSeries.includes(series))) {
+            if(force)
+                setHiddenSeries(hiddenSeries.slice());
+            return;
+        }
 
         let newHidden = hiddenSeries.slice();
         if(hidden) newHidden.push(series);
