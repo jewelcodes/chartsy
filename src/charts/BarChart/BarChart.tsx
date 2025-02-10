@@ -214,7 +214,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 }
 
 export function BarDataSeries({data, color, hidden, updateHidden, callback}: Readonly<{
-    data: Array<BarChartData>,
+    data: BarChartData[],
     color?: string,
     hidden?: boolean,
     callback?: Callback,
