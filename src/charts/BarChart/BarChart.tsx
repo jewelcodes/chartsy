@@ -140,6 +140,38 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         return Array.from({length: stepCount+1}, (_, i) => minValue + i * stepSize);
     }, [minValue, maxValue]);
 
+    const renderYLabels = () => props.ylabels && steps.map((step) => (
+        <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
+            top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
+            color: props.labelColor || "inherit",
+        }}>
+            {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
+        </span>
+    ));
+
+    const renderXGrid = () => props.xgrid && steps.map((step) => (
+        <div key={step} className="chartsy-xgrid" style={{
+            top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
+            backgroundColor: props.gridColor || "#d8d8d840"
+        }} />
+    ));
+
+    const renderXLabels = (label: string|number) => props.xlabels && (
+        <span className="chartsy-bar-xlabel" style={{color: props.labelColor || "inherit" }}>
+            {label}
+        </span>
+    );
+
+    const renderColumn = (label: string|number) => data[label].values.map(([value, color, series]) => (
+        <div className="chartsy-bar" style={{
+            height: hiddenSeries.includes(series) ? "0" :
+                `${(value-minValue) / (maxValue-minValue) * 100}%`,
+            top: hiddenSeries.includes(series) ? "100%" :
+                `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
+            backgroundColor: color,
+        }} key={`${series}-${value}`} />
+    ));
+
     return (<>
         {childrenProps}
 
@@ -156,43 +188,18 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                 style={{ gap: `${Math.round(20 / Object.keys(data).length)}%`,
                 borderColor: props.axis ? props.axisColor || "#ccc" : "transparent" }}>
                 
-                {props.ylabels && steps.map((step) => (
-                    <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
-                        top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-                        color: props.labelColor || "inherit",
-                    }}>
-                        {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
-                    </span>
-                ))}
-
-                {props.xgrid && steps.map((step) => (
-                    <div key={step} className="chartsy-xgrid" style={{
-                        top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
-                        backgroundColor: props.gridColor || "#d8d8d840"
-                    }} />
-                ))}
+                {renderYLabels()}
+                {renderXGrid()}
 
                 {Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
                         style={{ gap: `${(15 / data[label].values.length)}%` }}>
-                        {data[label].values.map(([value, color, series]) => (
-                            <div className="chartsy-bar" style={{
-                                height: hiddenSeries.includes(series) ? "0" :
-                                    `${(value-minValue) / (maxValue-minValue) * 100}%`,
-                                top: hiddenSeries.includes(series) ? "100%" :
-                                    `${(1 - (value-minValue) / (maxValue-minValue)) * 100}%`,
-                                backgroundColor: color,
-                            }} key={`${series}-${value}`} />
-                        ))}
-                        {props.xlabels && <span className="chartsy-bar-xlabel" style={{
-                            color: props.labelColor || "inherit" }}>
-                            {label}
-                        </span>}
+                        {renderColumn(label)}
+                        {renderXLabels(label)}
                     </div> /* chartsy-bar-column */
                 ))}
-
             </div> {/* chartsy-bar-chart */}
-        </div> {/* chartsy-container */ }
+        </div> {/* chartsy-container */}
     </>);
 }
 
