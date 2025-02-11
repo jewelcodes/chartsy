@@ -231,13 +231,16 @@ export function BarDataSeries({...props}: Readonly<BarDataSeriesProps>) {
 
     const [called, setCalled] = useState(false);
     const [series] = useState(Math.round(Math.random() * 1000000));
+    const length = props.data.length;
 
     if(!called) {
         setCalled(true);
-        props.data.forEach(({label, value}) => {
-            props.callback && props.callback(series, label, value,
-                props.color??"#888",
-                props.hidden??false);
+        props.data.forEach(({label, value}, index:number) => {
+            if((length < window.innerWidth) || (index % Math.round(length/window.innerWidth) === 0)) {
+                props.callback && props.callback(series, label, value,
+                    props.color??"#888",
+                    props.hidden??false);
+            }
         });
     } else if(props.updateHidden) {
         props.updateHidden(series, props.hidden??false);
