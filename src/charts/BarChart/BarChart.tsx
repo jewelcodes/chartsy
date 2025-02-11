@@ -223,7 +223,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     </>);
 }
 
-export function BarDataSeries({...props}: Readonly<BarDataSeriesProps>) {
+export function BarDataSeries({ ...props }: Readonly<BarDataSeriesProps>) {
     if(!props.data) {
         console.error("BarDataSeries: no data was provided");
         return null;
