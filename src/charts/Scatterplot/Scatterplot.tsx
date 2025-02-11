@@ -6,7 +6,7 @@
 "use client";
 "use strict";
 
-import "./BarChart.css";
+import "./Scatterplot.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState, useMemo } from "react";
 
@@ -52,6 +52,19 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         console.error("Scatterplot: at least one data series must be provided");
         return null;
     }
+
+    interface Data {
+        label: number;
+        values: [number, number, number][];
+    };
+
+    interface DataContainer {
+        [key: number]: Data;
+    };
+
+    const [data, setData] = useState<DataContainer>({});
+    const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
+    const [connectedSeries, setConnectedSeries] = useState<number[]>([]);
 
     return null;
 }
