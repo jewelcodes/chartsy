@@ -34,6 +34,7 @@
     transition: height var(--chartsy-data-duration, 0) ease-in-out,
         top var(--chartsy-data-duration, 0) ease-in-out,
         opacity var(--chartsy-data-duration, 0) ease-in-out;
+    transform: translateY(-0.25em);
 }
 
 .chartsy-scatterplot-has-ylabels {
