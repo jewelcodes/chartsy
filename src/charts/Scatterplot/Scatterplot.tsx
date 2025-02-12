@@ -222,11 +222,11 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     return (<>
         {childrenWithCallbacks}
 
-        <div className="chartsy-container"
+        <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
             style={{ width: `${props.width??50}vw`,
                 height: `${props.height??50}vh` }}>
 
-            <div className="chartsy-scatterplot" style={{
+            <div className={`chartsy-scatterplot ${props.live ? "chartsy-scatterplot-live" : "" }`} style={{
                 borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent"}}>
                 {Object.keys(data).map((series) => (
                     <div className="chartsy-scatterplot-series" key={series}>
