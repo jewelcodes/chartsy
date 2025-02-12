@@ -92,16 +92,17 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     };
 
     const updateHidden: HiddenCallback = (series, hidden, force) => {
-        if((hidden && hiddenSeries.includes(series)) || (!hidden && !hiddenSeries.includes(series))) {
-            if(force)
-                setHiddenSeries(hiddenSeries.slice());
-            return;
-        }
-
-        let newHidden = hiddenSeries.slice();
-        if(hidden) newHidden.push(series);
-        else newHidden.splice(newHidden.indexOf(series), 1);
-        setHiddenSeries(newHidden);
+        setHiddenSeries((prevHiddenSeries) => {
+            if ((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
+                if (force) return [...prevHiddenSeries];
+                return prevHiddenSeries;
+            }
+    
+            let newHidden = [...prevHiddenSeries];
+            if (hidden) newHidden.push(series);
+            else newHidden.splice(newHidden.indexOf(series), 1);
+            return newHidden;
+        });
     };
 
     const childrenWithCallbacks = React.Children.map(props.children, (child) => {
