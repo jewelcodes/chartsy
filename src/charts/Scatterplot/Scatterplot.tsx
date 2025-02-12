@@ -10,6 +10,9 @@ import "./Scatterplot.css";
 import "../Chartsy.css";
 import React, { ReactNode, useState, useMemo } from "react";
 
+const BOUNDARY_FACTOR = 0.1;
+const GRID_COLOR = "#d8d8d840";
+
 export interface ScatterplotProps {
     children: ReactNode;
     live?: boolean;
@@ -114,6 +117,85 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         }
     });
 
+    const adjustRange = (value: number, max: boolean) => {
+        let factor = 1;
+        while(Math.abs(value) / factor > 10)
+            factor *= 10;
+        
+        if(factor >= 10) factor /= 2;
+        
+        if(max) return Math.ceil(value / factor) * factor;
+        return Math.floor(value / factor) * factor;
+    }
+
+    const { maxValueX, minValueX, maxValueY, minValueY } = useMemo(() => {
+        let maxX = -Infinity, minX = Infinity;
+        let maxY = -Infinity, minY = Infinity;
+
+        Object.keys(data).forEach((series) => {
+            data[Number(series)].values.forEach(([x, y]) => {
+                if(x > maxX) maxX = x;
+                if(x < minX) minX = x;
+                if(y > maxY) maxY = y;
+                if(y < minY) minY = y;
+            });
+        });
+
+        if(maxX > 0) maxX *= (1 + BOUNDARY_FACTOR);
+        else maxX *= (1 - BOUNDARY_FACTOR);
+        if(minX > 0) minX *= (1 - BOUNDARY_FACTOR);
+        else minX *= (1 + BOUNDARY_FACTOR);
+        if(minY > 0) minY *= (1 - BOUNDARY_FACTOR);
+        else minY *= (1 + BOUNDARY_FACTOR);
+        if(maxY > 0) maxY *= (1 + BOUNDARY_FACTOR);
+        else maxY *= (1 - BOUNDARY_FACTOR);
+
+        const rangeX = maxX - minX;
+        const rangeY = maxY - minY;
+        if(rangeX > 1) {
+            if(minX > 0) minX = 0;
+            maxX = Math.ceil(maxX);
+            minX = Math.floor(minX);
+
+            if(maxX % 10) maxX += 10 - (maxX % 10);
+            if(minX % 10) minX -= minX % 10;
+        } else {
+            let rounded = Math.round(maxX * 2) / 2;
+            if(rounded > maxX) maxX = rounded;
+            else maxX = Math.ceil(maxX);
+
+            rounded = Math.round(minX * 2) / 2;
+            if(rounded < minX) minX = rounded;
+            else minX = Math.floor(minX);
+        }
+
+        if(rangeY > 1) {
+            if(minY > 0) minY = 0;
+            maxY = Math.ceil(maxY);
+            minY = Math.floor(minY);
+
+            if(maxY % 10) maxY += 10 - (maxY % 10);
+            if(minY % 10) minY -= minY % 10;
+        } else {
+            let rounded = Math.round(maxY * 2) / 2;
+            if(rounded > maxY) maxY = rounded;
+            else maxY = Math.ceil(maxY);
+
+            rounded = Math.round(minY * 2) / 2;
+            if(rounded < minY) minY = rounded;
+            else minY = Math.floor(minY);
+        }
+
+        if(maxX === minX) maxX++;
+        if(maxY === minY) maxY++;
+        if(maxX >= 10) maxX = adjustRange(maxX, true);
+        if(minX <= -10) minX = adjustRange(minX, false);
+        if(maxY >= 10) maxY = adjustRange(maxY, true);
+        if(minY <= -10) minY = adjustRange(minY, false);
+
+        return { maxValueX: maxX, minValueX: minX, maxValueY: maxY, minValueY: minY };
+    }, [data, hiddenSeries, connectedSeries]);
+
     return (<>
         {childrenWithCallbacks}
 
@@ -122,7 +204,10 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 height: `${props.height??50}vh` }}>
             <div className="chartsy-scatterplot">
                 {Object.keys(data).map((series) => (
-                    <div>test {series}</div>
+                    <div>test {series}<br/>
+                        Max X: {maxValueX} - Min X: {minValueX}<br/>
+                        Max Y: {maxValueY} - Min Y: {minValueY}
+                    </div>
                 ))}
             </div> {/* chartsy-scatterplot */}
         </div> {/* chartsy-container */}
