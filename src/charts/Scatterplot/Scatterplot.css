@@ -44,3 +44,13 @@
     left: var(--chartsy-left-margin);
     width: calc(100% - var(--chartsy-left-margin));
 }
+
+.chartsy-scatterplot-ylabel {
+    position: absolute;
+    left: 0;
+    text-align: right;
+    width: var(--chartsy-left-margin);
+    text-overflow: clip;
+    font-size: smaller;
+    transform: translateY(-0.5em);
+}
