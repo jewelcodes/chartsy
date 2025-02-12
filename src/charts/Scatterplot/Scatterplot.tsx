@@ -76,6 +76,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
         newData[series].values.push([x, y, color]);
         setData(newData);
+        updateHidden(series, hidden, true);
+        updateConnected(series, connected, true);
     };
 
     const updateHidden: HiddenCallback = (series, hidden, force) => {
