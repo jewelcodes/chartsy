@@ -210,6 +210,15 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     const stepsX = useMemo(() => steps(maxValueX, minValueX), [maxValueX, minValueX]);
     const stepsY = useMemo(() => steps(maxValueY, minValueY), [maxValueY, minValueY]);
 
+    const renderYLabels = () => props.ylabels && stepsY.map((step) => (
+        <span key={`step-${step}`} className="chartsy-scatterplot-ylabel" style={{
+            top: `${(1 - (step-minValueY) / (maxValueY-minValueY)) * 100}%`,
+            color: props.labelColor ?? "inherit",
+        }}>
+            {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
+        </span>
+    ));
+
     const plot = (x: number, y: number, color: string, series: number, i: number) => (
         <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
             left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
@@ -229,7 +238,9 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
             <div className={`chartsy-scatterplot ${props.live ? "chartsy-scatterplot-live" : "" }
                 ${props.ylabels ? "chartsy-scatterplot-has-ylabels " : ""}`} style={{
                 borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent"}}>
-                
+
+                {renderYLabels()}
+
                 <div className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
