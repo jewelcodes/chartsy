@@ -104,7 +104,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         setHiddenSeries(newHidden);
     };
 
-    const childrenProps = React.Children.map(props.children, (child) => {
+    const childrenWithCallbacks = React.Children.map(props.children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{ callback: Callback,
                 updateHidden: HiddenCallback }>,
@@ -193,7 +193,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     ));
 
     return (<>
-        {childrenProps}
+        {childrenWithCallbacks}
 
         <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
             style={{ width: `${props.width??50}vw`,
