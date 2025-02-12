@@ -91,6 +91,19 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         setHiddenSeries(newHidden);
     };
 
+    const updateConnected: ConnectedCallback = (series, connected, force) => {
+        if((connected && connectedSeries.includes(series) || (!connected && !connectedSeries.includes(series)))) {
+            if(force)
+                setConnectedSeries(connectedSeries.slice());
+            return;
+        }
+
+        let newConnected = connectedSeries.slice();
+        if(connected) newConnected.push(series);
+        else newConnected.splice(newConnected.indexOf(series), 1);
+        setConnectedSeries(newConnected);
+    };
+
     const childrenWithCallbacks = React.Children.map(props.children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{callback: Callback,
