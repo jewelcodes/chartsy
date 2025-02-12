@@ -219,6 +219,15 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         </span>
     ));
 
+    const renderXLabels = () => props.xlabels && stepsX.map((step) => (
+        <span key={`step-${step}`} className="chartsy-scatterplot-xlabel" style={{
+            left: `${(step-minValueX) / (maxValueX-minValueX) * 100}%`,
+            color: props.labelColor ?? "inherit",
+        }}>
+            {step === 0 || Math.abs(step) > 1 ? Math.round(step).toLocaleString() : step.toFixed(2)}
+        </span>
+    ));
+
     const plot = (x: number, y: number, color: string, series: number, i: number) => (
         <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
             left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
@@ -240,6 +249,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent"}}>
 
                 {renderYLabels()}
+                {renderXLabels()}
 
                 <div className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
