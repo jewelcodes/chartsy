@@ -44,8 +44,8 @@ export interface ScatterplotDataSeriesProps {
 type Callback = (series: number, x: number, y: number, connected: boolean,
     color: string, hidden: boolean) => void;
 
-type HiddenCallback = (series: number, hidden: boolean) => void;
-type ConnectedCallback = (series: number, connected: boolean) => void;
+type HiddenCallback = (series: number, hidden: boolean, force?: boolean) => void;
+type ConnectedCallback = (series: number, connected: boolean, force?: boolean) => void;
 
 export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     if(!props.children) {
@@ -76,6 +76,19 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
         newData[series].values.push([x, y, color]);
         setData(newData);
+    };
+
+    const updateHidden: HiddenCallback = (series, hidden, force) => {
+        if((hidden && hiddenSeries.includes(series) || (!hidden && !hiddenSeries.includes(series)))) {
+            if(force)
+                setHiddenSeries(hiddenSeries.slice());
+            return;
+        }
+
+        let newHidden = hiddenSeries.slice();
+        if(hidden) newHidden.push(series);
+        else newHidden.splice(newHidden.indexOf(series), 1);
+        setHiddenSeries(newHidden);
     };
 
     const childrenWithCallbacks = React.Children.map(props.children, (child) => {
