@@ -66,6 +66,18 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
     const [connectedSeries, setConnectedSeries] = useState<number[]>([]);
 
+    const callback: Callback = (series, x, y, connected, color, hidden) => {
+        /* stub */
+    };
+
+    const childrenProps = React.Children.map(props.children, (child) => {
+        if(React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<{callback: Callback,
+                updateHidden: HiddenCallback, updateConnected: ConnectedCallback}>,
+                {callback: callback});
+        }
+    });
+
     return null;
 }
 
