@@ -110,6 +110,9 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
                 props.hidden??false,
             );
         }
+    } else {
+        props.updateHidden?.(series, props.hidden??false);
+        props.updateConnected?.(series, props.connected??false);
     }
 
     return null;
