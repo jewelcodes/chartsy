@@ -23,4 +23,7 @@
     width: 0.5em;
     height: 0.5em;
     border-radius: 100%;
+    transition: height var(--chartsy-data-duration, 0) ease-in-out,
+        top var(--chartsy-data-duration, 0) ease-in-out,
+        opacity var(--chartsy-data-duration, 0) ease-in-out;
 }
