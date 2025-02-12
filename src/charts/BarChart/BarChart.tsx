@@ -47,7 +47,7 @@ export interface BarDataSeriesProps {
 type Callback = (series: number, label: string|number, value: number,
     color: string, hidden: boolean) => void;
 
-type HiddenCallback = (series: number, hidden: boolean) => void;
+type HiddenCallback = (series: number, hidden: boolean, force?: boolean) => void;
 
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
     if(!props.children) {
@@ -91,7 +91,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         updateHidden(series, hidden, true);
     };
 
-    const updateHidden = (series: number, hidden: boolean, force?:boolean) => {
+    const updateHidden: HiddenCallback = (series, hidden, force) => {
         if((hidden && hiddenSeries.includes(series)) || (!hidden && !hiddenSeries.includes(series))) {
             if(force)
                 setHiddenSeries(hiddenSeries.slice());
