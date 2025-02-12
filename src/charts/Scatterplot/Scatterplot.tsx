@@ -97,6 +97,20 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
         return null;
     }
 
-    /* stub */
+    const [called, setCalled] = useState(false);
+    const [series] = useState(Math.floor(Math.random() * 1000000));
+    const length = props.data.length;
+
+    if(!called) {
+        setCalled(true);
+        for(let i = 0; i < length; i++) {
+            props.callback?.(series, props.data[i].x, props.data[i].y,
+                props.connected??false,
+                props.color??"#888",
+                props.hidden??false,
+            );
+        }
+    }
+
     return null;
 }
