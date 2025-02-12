@@ -225,9 +225,9 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         <div className="chartsy-container"
             style={{ width: `${props.width??50}vw`,
                 height: `${props.height??50}vh` }}>
-            Max X: {maxValueX} - Min X: {minValueX}<br/>
-            Max Y: {maxValueY} - Min Y: {minValueY}
-            <div className="chartsy-scatterplot">
+
+            <div className="chartsy-scatterplot" style={{
+                borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent"}}>
                 {Object.keys(data).map((series) => (
                     <div className="chartsy-scatterplot-series" key={series}>
                         {data[Number(series)].values.map(([x, y, color], i) => plot(x, y, color, series, i))}
