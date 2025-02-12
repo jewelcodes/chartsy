@@ -55,3 +55,20 @@
     font-size: smaller;
     transform: translateY(-0.5em);
 }
+
+.chartsy-scatterplot-xlabel-container {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 1em);
+    width: calc(100% - var(--chartsy-left-margin));
+}
+
+.chartsy-scatterplot-xlabel {
+    position: absolute;
+    top: calc(100% + 1em);
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: smaller;
+    transform: translateX(var(--chartsy-left-margin));
+}
