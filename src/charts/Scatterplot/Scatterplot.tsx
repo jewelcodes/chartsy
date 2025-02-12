@@ -70,7 +70,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         /* stub */
     };
 
-    const childrenProps = React.Children.map(props.children, (child) => {
+    const childrenWithCallbacks = React.Children.map(props.children, (child) => {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{callback: Callback,
                 updateHidden: HiddenCallback, updateConnected: ConnectedCallback}>,
