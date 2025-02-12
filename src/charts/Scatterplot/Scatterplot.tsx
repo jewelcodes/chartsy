@@ -115,7 +115,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         if(React.isValidElement(child)) {
             return React.cloneElement(child as React.ReactElement<{callback: Callback,
                 updateHidden: HiddenCallback, updateConnected: ConnectedCallback}>,
-                {callback: callback});
+                {callback: callback, updateHidden: updateHidden, updateConnected: updateConnected});
         }
     });
 
