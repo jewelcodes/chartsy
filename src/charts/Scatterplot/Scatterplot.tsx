@@ -226,13 +226,18 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
             style={{ width: `${props.width??50}vw`,
                 height: `${props.height??50}vh` }}>
 
-            <div className={`chartsy-scatterplot ${props.live ? "chartsy-scatterplot-live" : "" }`} style={{
+            <div className={`chartsy-scatterplot ${props.live ? "chartsy-scatterplot-live" : "" }
+                ${props.ylabels ? "chartsy-scatterplot-has-ylabels " : ""}`} style={{
                 borderColor: props.axis ? props.axisColor ?? "#ccc" : "transparent"}}>
-                {Object.keys(data).map((series) => (
-                    <div className="chartsy-scatterplot-series" key={series}>
-                        {data[Number(series)].values.map(([x, y, color], i) => plot(x, y, color, series, i))}
-                    </div>
-                ))}
+                
+                <div className="chartsy-scatterplot-container">
+                    {Object.keys(data).map((series) => (
+                        <div className="chartsy-scatterplot-series" key={series}>
+                            {data[Number(series)].values.map(([x, y, color], i) => plot(x, y, color, series, i))}
+                        </div>
+                    ))}
+                </div> {/* chartsy-scatterplot-container */}
+
             </div> {/* chartsy-scatterplot */}
         </div> {/* chartsy-container */}
     </>);
