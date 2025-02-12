@@ -213,9 +213,9 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     const plot = (x: number, y: number, color: string, series: number, i: number) => (
         <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
             left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
-            top: `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%`,
+            top: !hiddenSeries.includes(Number(series)) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
             backgroundColor: color,
-            display: hiddenSeries.includes(Number(series)) ? "none" : "block"}}>
+            opacity: hiddenSeries.includes(Number(series)) ? 0 : "inherit"}}>
         </div>
     );
 
