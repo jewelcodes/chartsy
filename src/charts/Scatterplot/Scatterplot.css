@@ -14,8 +14,8 @@
     transition: opacity var(--chartsy-opacity-duration, 0) ease-in-out;
 }
 
-.chartsy-scatterplot-live .chartsy-scatterplot-series:hover {
-    opacity: 0.7;
+.chartsy-scatterplot-live:hover .chartsy-scatterplot-series:not(:hover) {
+    opacity: 0.6;
 }
 
 .chartsy-scatterplot-point {
