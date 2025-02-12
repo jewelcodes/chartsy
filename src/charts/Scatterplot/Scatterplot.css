@@ -3,3 +3,10 @@
  * Omar Elghoul, 2025
  */
 
+.chartsy-scatterplot {
+    height: 100%;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+    border-color: transparent;
+    padding: 0 1em;
+}
