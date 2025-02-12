@@ -59,7 +59,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     };
 
     interface DataContainer {
-        [series: number]: Data;
+        [key: number]: Data;
     };
 
     const [data, setData] = useState<DataContainer>({});
