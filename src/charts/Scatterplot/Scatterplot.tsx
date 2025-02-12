@@ -196,6 +196,18 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         return { maxValueX: maxX, minValueX: minX, maxValueY: maxY, minValueY: minY };
     }, [data, hiddenSeries, connectedSeries]);
 
+    const steps = (max: number, min: number) => {
+        const range = max - min;
+        let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
+        if(stepCount > 10) stepCount = 5;
+        const stepSize = range / stepCount;
+
+        return Array.from({length: stepCount+1}, (_, i) => min + i * stepSize);
+    };
+
+    const stepsX = useMemo(() => steps(maxValueX, minValueX), [maxValueX, minValueX]);
+    const stepsY = useMemo(() => steps(maxValueY, minValueY), [maxValueY, minValueY]);
+
     return (<>
         {childrenWithCallbacks}
 
@@ -204,7 +216,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 height: `${props.height??50}vh` }}>
             <div className="chartsy-scatterplot">
                 {Object.keys(data).map((series) => (
-                    <div>test {series}<br/>
+                    <div>
                         Max X: {maxValueX} - Min X: {minValueX}<br/>
                         Max Y: {maxValueY} - Min Y: {minValueY}
                     </div>
