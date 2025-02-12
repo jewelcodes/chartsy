@@ -78,7 +78,17 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         }
     });
 
-    return null;
+    return (<>
+        {childrenWithCallbacks}
+
+        <div className="chartsy-container"
+            style={{ width: `${props.width??50}vw`,
+                height: `${props.height??50}vh` }}>
+            <div className="chartsy-scatterplot">
+                
+            </div> {/* chartsy-scatterplot */}
+        </div> {/* chartsy-container */}
+    </>);
 }
 
 export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesProps>) {
