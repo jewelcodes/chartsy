@@ -54,12 +54,12 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     }
 
     interface Data {
-        label: number;
-        values: [number, number, number][];
+        series: number;
+        values: [number, number, string][]; // x, y, color
     };
 
     interface DataContainer {
-        [key: number]: Data;
+        [series: number]: Data;
     };
 
     const [data, setData] = useState<DataContainer>({});
@@ -67,7 +67,15 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     const [connectedSeries, setConnectedSeries] = useState<number[]>([]);
 
     const callback: Callback = (series, x, y, connected, color, hidden) => {
-        /* stub */
+        let newData = new Object(data) as DataContainer;
+        if(!newData[series]) {
+            newData[series] = new Object() as Data;
+            newData[series].series = series;
+            newData[series].values = [];
+        }
+
+        newData[series].values.push([x, y, color]);
+        setData(newData);
     };
 
     const childrenWithCallbacks = React.Children.map(props.children, (child) => {
@@ -85,7 +93,9 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
             style={{ width: `${props.width??50}vw`,
                 height: `${props.height??50}vh` }}>
             <div className="chartsy-scatterplot">
-                
+                {Object.keys(data).map((series) => (
+                    <div>test {series}</div>
+                ))}
             </div> {/* chartsy-scatterplot */}
         </div> {/* chartsy-container */}
     </>);
