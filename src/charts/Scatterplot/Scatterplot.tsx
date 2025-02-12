@@ -84,29 +84,31 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     };
 
     const updateHidden: HiddenCallback = (series, hidden, force) => {
-        if((hidden && hiddenSeries.includes(series) || (!hidden && !hiddenSeries.includes(series)))) {
-            if(force)
-                setHiddenSeries(hiddenSeries.slice());
-            return;
-        }
-
-        let newHidden = hiddenSeries.slice();
-        if(hidden) newHidden.push(series);
-        else newHidden.splice(newHidden.indexOf(series), 1);
-        setHiddenSeries(newHidden);
+        setHiddenSeries((prevHiddenSeries) => {
+            if ((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
+                if (force) return [...prevHiddenSeries];
+                return prevHiddenSeries;
+            }
+    
+            let newHidden = [...prevHiddenSeries];
+            if (hidden) newHidden.push(series);
+            else newHidden.splice(newHidden.indexOf(series), 1);
+            return newHidden;
+        });
     };
 
     const updateConnected: ConnectedCallback = (series, connected, force) => {
-        if((connected && connectedSeries.includes(series) || (!connected && !connectedSeries.includes(series)))) {
-            if(force)
-                setConnectedSeries(connectedSeries.slice());
-            return;
-        }
-
-        let newConnected = connectedSeries.slice();
-        if(connected) newConnected.push(series);
-        else newConnected.splice(newConnected.indexOf(series), 1);
-        setConnectedSeries(newConnected);
+        setConnectedSeries((prevConnectedSeries) => {
+            if ((connected && prevConnectedSeries.includes(series)) || (!connected && !prevConnectedSeries.includes(series))) {
+                if (force) return [...prevConnectedSeries];
+                return prevConnectedSeries;
+            }
+    
+            let newConnected = [...prevConnectedSeries];
+            if (connected) newConnected.push(series);
+            else newConnected.splice(newConnected.indexOf(series), 1);
+            return newConnected;
+        });
     };
 
     const childrenWithCallbacks = React.Children.map(props.children, (child) => {
@@ -208,17 +210,27 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     const stepsX = useMemo(() => steps(maxValueX, minValueX), [maxValueX, minValueX]);
     const stepsY = useMemo(() => steps(maxValueY, minValueY), [maxValueY, minValueY]);
 
+    const plot = (x: number, y: number, color: string, series: number, i: number) => (
+        <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
+            left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
+            top: `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%`,
+            backgroundColor: color,
+            display: hiddenSeries.includes(Number(series)) ? "none" : "block"}}>
+        </div>
+    );
+
     return (<>
         {childrenWithCallbacks}
 
         <div className="chartsy-container"
             style={{ width: `${props.width??50}vw`,
                 height: `${props.height??50}vh` }}>
+            Max X: {maxValueX} - Min X: {minValueX}<br/>
+            Max Y: {maxValueY} - Min Y: {minValueY}
             <div className="chartsy-scatterplot">
                 {Object.keys(data).map((series) => (
-                    <div>
-                        Max X: {maxValueX} - Min X: {minValueX}<br/>
-                        Max Y: {maxValueY} - Min Y: {minValueY}
+                    <div className="chartsy-scatterplot-series" key={series}>
+                        {data[Number(series)].values.map(([x, y, color], i) => plot(x, y, color, series, i))}
                     </div>
                 ))}
             </div> {/* chartsy-scatterplot */}
@@ -239,15 +251,14 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
     if(!called) {
         setCalled(true);
         for(let i = 0; i < length; i++) {
-            props.callback?.(series, props.data[i].x, props.data[i].y,
+            props.callback && props.callback(series, props.data[i].x, props.data[i].y,
                 props.connected??false,
                 props.color??"#888",
-                props.hidden??false,
-            );
+                props.hidden??false);
         }
     } else {
-        props.updateHidden?.(series, props.hidden??false);
-        props.updateConnected?.(series, props.connected??false);
+        props.updateHidden && props.updateHidden(series, props.hidden??false);
+        props.updateConnected && props.updateConnected(series, props.connected??false);
     }
 
     return null;
