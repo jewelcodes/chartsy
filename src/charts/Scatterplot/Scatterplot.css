@@ -10,3 +10,16 @@
     border-color: transparent;
     padding: 0 1em;
 }
+
+.chartsy-scatterplot-series {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.chartsy-scatterplot-point {
+    position: absolute;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 100%;
+}
