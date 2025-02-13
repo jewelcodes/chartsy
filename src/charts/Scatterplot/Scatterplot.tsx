@@ -230,6 +230,13 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         </div>
     );
 
+    const renderXGrid = () => props.xgrid && stepsY.map((step) => (
+        <div key={`xgrid-${step}`} className="chartsy-xgrid" style={{
+            top: `${(1 - (step-minValueY) / (maxValueY-minValueY)) * 100}%`,
+            backgroundColor: props.gridColor ?? GRID_COLOR,
+        }} />
+    ));
+
     const renderPlot = (x: number, y: number, color: string, series: number, i: number) => (
         <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
             left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
@@ -252,6 +259,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
                 {renderYLabels()}
                 {renderXLabels()}
+                {renderXGrid()}
 
                 <div className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
