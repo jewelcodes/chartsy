@@ -241,6 +241,9 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     return (<>
         {childrenWithCallbacks}
+        {Object.keys(data).map((series) => (
+            <div>length: {data[Number(series)].values.length}</div>
+        ))}
 
         <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
             style={{ width: `${props.width??50}vw`,
@@ -278,12 +281,13 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
 
     if(!called) {
         setCalled(true);
-        for(let i = 0; i < length; i++) {
-            props.callback && props.callback(series, props.data[i].x, props.data[i].y,
-                props.connected??false,
-                props.color??"#888",
-                props.hidden??false);
-        }
+        props.data.forEach(({x, y}, index:number) => {
+            if((length < window.innerWidth) || (index % Math.round(length/(window.innerWidth*2)) === 0)) {
+                props.callback && props.callback(series, x, y,
+                    props.connected??false,
+                    props.color??"#888", props.hidden??false);
+            }
+        });
     } else {
         props.updateHidden && props.updateHidden(series, props.hidden??false);
         props.updateConnected && props.updateConnected(series, props.connected??false);
