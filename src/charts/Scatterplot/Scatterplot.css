@@ -72,3 +72,13 @@
     font-size: smaller;
     transform: translateX(var(--chartsy-left-margin));
 }
+
+.chartsy-scatterplot-ygrid-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.chartsy-scatterplot-has-ylabels .chartsy-scatterplot-ygrid-container {
+    width: calc(100% - var(--chartsy-left-margin));
+}
