@@ -85,13 +85,13 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     const updateHidden: HiddenCallback = (series, hidden, force) => {
         setHiddenSeries((prevHiddenSeries) => {
-            if ((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
-                if (force) return [...prevHiddenSeries];
+            if((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
+                if(force) return [...prevHiddenSeries];
                 return prevHiddenSeries;
             }
     
             let newHidden = [...prevHiddenSeries];
-            if (hidden) newHidden.push(series);
+            if(hidden) newHidden.push(series);
             else newHidden.splice(newHidden.indexOf(series), 1);
             return newHidden;
         });
@@ -99,13 +99,13 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     const updateConnected: ConnectedCallback = (series, connected, force) => {
         setConnectedSeries((prevConnectedSeries) => {
-            if ((connected && prevConnectedSeries.includes(series)) || (!connected && !prevConnectedSeries.includes(series))) {
-                if (force) return [...prevConnectedSeries];
+            if((connected && prevConnectedSeries.includes(series)) || (!connected && !prevConnectedSeries.includes(series))) {
+                if(force) return [...prevConnectedSeries];
                 return prevConnectedSeries;
             }
     
             let newConnected = [...prevConnectedSeries];
-            if (connected) newConnected.push(series);
+            if(connected) newConnected.push(series);
             else newConnected.splice(newConnected.indexOf(series), 1);
             return newConnected;
         });
@@ -230,12 +230,12 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         </div>
     );
 
-    const plot = (x: number, y: number, color: string, series: number, i: number) => (
+    const renderPlot = (x: number, y: number, color: string, series: number, i: number) => (
         <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
             left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
-            top: !hiddenSeries.includes(Number(series)) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
+            top: !hiddenSeries.includes(series) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
             backgroundColor: color,
-            opacity: hiddenSeries.includes(Number(series)) ? 0 : "inherit"}}>
+            opacity: hiddenSeries.includes(series) ? 0 : "inherit"}}>
         </div>
     );
 
@@ -256,7 +256,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 <div className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
-                            {data[Number(series)].values.map(([x, y, color], i) => plot(x, y, color, series, i))}
+                            {data[Number(series)].values.map(([x, y, color], i) => renderPlot(x, y, color, Number(series), i))}
                         </div>
                     ))}
                 </div> {/* chartsy-scatterplot-container */}
