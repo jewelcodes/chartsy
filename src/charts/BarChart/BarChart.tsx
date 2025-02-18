@@ -197,8 +197,8 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         {childrenWithCallbacks}
 
         <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
-            style={{ width: `${props.width??50}vw`,
-                height: `${props.height??40}vh`,
+            style={{ width: `${props.width??50}%`,
+                height: `${props.height??40}%`,
                 marginBottom: props.xlabels ? "2em" : "0" }}>
 
             <div className={`chartsy-bar-chart ${props.live ? "chartsy-bar-live " : ""} 
