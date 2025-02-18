@@ -261,8 +261,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         {childrenWithCallbacks}
 
         <div className={`chartsy-container ${props.toggle ? "chartsy-container-toggle" : ""}`}
-            style={{ width: `${props.width??50}vw`,
-                height: `${props.height??50}vh` }}>
+            style={{ width: `${props.width??50}%`,
+                height: `${props.height??50}%` }}>
 
             <div className={`chartsy-scatterplot ${props.live ? "chartsy-scatterplot-live" : "" }
                 ${props.ylabels ? "chartsy-scatterplot-has-ylabels " : ""}`} style={{
