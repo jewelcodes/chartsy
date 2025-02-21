@@ -265,14 +265,46 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         </div>
     );
 
-    const renderPlot = (x: number, y: number, color: string, series: number, i: number) => (
-        <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
-            left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
-            top: !hiddenSeries.includes(series) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
-            backgroundColor: color,
-            opacity: hiddenSeries.includes(series) ? 0 : "inherit"}}>
-        </div>
-    );
+    const distance = (x1: number, y1: number, x2: number, y2: number) =>
+        Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) + 1;
+
+    const angle = (x1: number, y1: number, x2: number, y2: number) =>
+        Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+    const renderPlot = (x: number, y: number, color: string, series: number, i: number, end: number) => {
+        const x1 = (x-minValueX) / (maxValueX-minValueX) * width;
+        const y1 = (1 - (y-minValueY) / (maxValueY-minValueY)) * height;
+
+        let x2, y2;
+        if(i < end-1) {
+            const nextX = data[series].values[i+1][0];
+            const nextY = data[series].values[i+1][1];
+            x2 = (nextX-minValueX) / (maxValueX-minValueX) * width;
+            y2 = (1 - (nextY-minValueY) / (maxValueY-minValueY)) * height;
+        }
+
+        return (<>
+            {(!connectedSeries.includes(series)) && (
+                <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
+                    left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
+                    top: !hiddenSeries.includes(series) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
+                    backgroundColor: color,
+                    opacity: hiddenSeries.includes(series) ? 0 : "inherit"}}>
+                </div>
+            )}
+
+            {connectedSeries.includes(series) && (i < end-1) && x2 && y2 && (
+                <div className="chartsy-scatterplot-line" key={`${series}-${i}-line`} style={{
+                    left: `${x1}px`,
+                    top: hiddenSeries.includes(series) ? "100%" : `${y1}px`,
+                    width: `${distance(x1, y1, x2, y2)}px`,
+                    transform: hiddenSeries.includes(series) ? "none" : `rotate(${angle(x1, y1, x2, y2)}deg)`,
+                    opacity: hiddenSeries.includes(series) ? 0 : "inherit",
+                    backgroundColor: color}}>
+                </div>
+            )}
+        </>);
+    };
 
     return (<>
         {childrenWithCallbacks}
@@ -293,7 +325,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 <div ref={container} className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
-                            {data[Number(series)].values.map(([x, y, color], i) => renderPlot(x, y, color, Number(series), i))}
+                            {data[Number(series)].values.map(([x, y, color], i) =>
+                                renderPlot(x, y, color, Number(series), i, data[Number(series)].values.length))}
                         </div>
                     ))}
                 </div> {/* chartsy-scatterplot-container */}
