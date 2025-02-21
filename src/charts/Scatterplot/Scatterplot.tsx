@@ -8,7 +8,7 @@
 
 import "./Scatterplot.css";
 import "../Chartsy.css";
-import React, { ReactNode, useState, useMemo } from "react";
+import React, { ReactNode, useState, useMemo, useRef } from "react";
 
 const BOUNDARY_FACTOR = 0.1;
 const GRID_COLOR = "#d8d8d840";
@@ -65,9 +65,26 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         [key: number]: Data;
     };
 
+    const container = useRef<HTMLDivElement>(null);
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
     const [data, setData] = useState<DataContainer>({});
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
     const [connectedSeries, setConnectedSeries] = useState<number[]>([]);
+
+    // this is necessary for calculating the rotation angle for the line
+    // segments connecting the points in the scatterplot
+    const handleResize = () => {
+        if(container.current) {
+            if(container.current.clientWidth != width)
+                setWidth(container.current.clientWidth);
+            if(container.current.clientHeight != height)
+                setHeight(container.current.clientHeight);
+        }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
 
     const callback: Callback = (series, x, y, connected, color, hidden) => {
         let newData = new Object(data) as DataContainer;
@@ -273,7 +290,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 {renderXGrid()}
                 {renderYGrid()}
 
-                <div className="chartsy-scatterplot-container">
+                <div ref={container} className="chartsy-scatterplot-container">
                     {Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
                             {data[Number(series)].values.map(([x, y, color], i) => renderPlot(x, y, color, Number(series), i))}
