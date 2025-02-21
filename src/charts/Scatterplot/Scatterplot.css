@@ -37,6 +37,27 @@
     transform: translateY(-0.25em);
 }
 
+.chartsy-scatterplot-line {
+    position: absolute;
+    transition: top var(--chartsy-data-duration, 0) ease-in-out,
+        opacity var(--chartsy-data-duration, 0) ease-in-out,
+        transform var(--chartsy-data-duration, 0) ease-in-out;
+    height: 0.5em;
+    margin-top: -0.25em;
+    margin-left: 0.25em;
+    transform-origin: top left;
+}
+
+.chartsy-scatterplot-series > .chartsy-scatterplot-line:first-of-type {
+    border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+}
+
+.chartsy-scatterplot-series > .chartsy-scatterplot-line:last-of-type {
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+
 .chartsy-scatterplot-has-ylabels {
     margin-left: var(--chartsy-left-margin);
 }
