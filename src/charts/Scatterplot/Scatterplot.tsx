@@ -266,7 +266,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     );
 
     const distance = (x1: number, y1: number, x2: number, y2: number) =>
-        Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) + 1;
+        Math.ceil(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
 
     const angle = (x1: number, y1: number, x2: number, y2: number) =>
         Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
