@@ -50,68 +50,8 @@ type Callback = (series: number, label: string|number, value: number,
 type HiddenCallback = (series: number, hidden: boolean, force?: boolean) => void;
 
 export function BarChart({ ...props }: Readonly<BarChartProps>) {
-    if(!props.children) {
-        console.error("BarChart: at least one data series must be provided");
-        return null;
-    }
-
-    interface Data {
-        label: string|number;
-        values: [number, string, number][];
-    };
-
-    interface DataContainer {
-        [key: string]: Data;
-    };
-
     const [data, setData] = useState<DataContainer>({});
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
-
-    const adjustRange = (value: number, max: boolean) => {
-        let factor = 1;
-        while(Math.abs(value) / factor > 10)
-            factor *= 10;
-        
-        if(factor >= 10) factor /= 2;
-        
-        if(max) return Math.ceil(value / factor) * factor;
-        return Math.floor(value / factor) * factor;
-    };
-
-    const callback: Callback = (series, label, value, color, hidden) => {
-        let newData = new Object(data) as DataContainer;
-        if(!newData[label]) {
-            newData[label] = new Object() as Data;
-            newData[label].label = label;
-            newData[label].values = [];
-        }
-    
-        newData[label].values.push([value, color, series]);
-        setData(newData);
-        updateHidden(series, hidden, true);
-    };
-
-    const updateHidden: HiddenCallback = (series, hidden, force) => {
-        setHiddenSeries((prevHiddenSeries) => {
-            if ((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
-                if (force) return [...prevHiddenSeries];
-                return prevHiddenSeries;
-            }
-    
-            let newHidden = [...prevHiddenSeries];
-            if (hidden) newHidden.push(series);
-            else newHidden.splice(newHidden.indexOf(series), 1);
-            return newHidden;
-        });
-    };
-
-    const childrenWithCallbacks = React.Children.map(props.children, (child) => {
-        if(React.isValidElement(child)) {
-            return React.cloneElement(child as React.ReactElement<{ callback: Callback,
-                updateHidden: HiddenCallback }>,
-                { callback: callback, updateHidden: updateHidden });
-        }
-    });
 
     const { maxValue, minValue } = useMemo(() => {
         let max = -Infinity, min = Infinity;
@@ -160,6 +100,66 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 
         return Array.from({length: stepCount+1}, (_, i) => minValue + i * stepSize);
     }, [minValue, maxValue]);
+
+    if(!props.children) {
+        console.error("BarChart: at least one data series must be provided");
+        return null;
+    }
+
+    interface Data {
+        label: string|number;
+        values: [number, string, number][];
+    };
+
+    interface DataContainer {
+        [key: string]: Data;
+    };
+
+    const adjustRange = (value: number, max: boolean) => {
+        let factor = 1;
+        while(Math.abs(value) / factor > 10)
+            factor *= 10;
+        
+        if(factor >= 10) factor /= 2;
+        
+        if(max) return Math.ceil(value / factor) * factor;
+        return Math.floor(value / factor) * factor;
+    };
+
+    const callback: Callback = (series, label, value, color, hidden) => {
+        let newData = new Object(data) as DataContainer;
+        if(!newData[label]) {
+            newData[label] = new Object() as Data;
+            newData[label].label = label;
+            newData[label].values = [];
+        }
+    
+        newData[label].values.push([value, color, series]);
+        setData(newData);
+        updateHidden(series, hidden, true);
+    };
+
+    const updateHidden: HiddenCallback = (series, hidden, force) => {
+        setHiddenSeries((prevHiddenSeries) => {
+            if ((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
+                if (force) return [...prevHiddenSeries];
+                return prevHiddenSeries;
+            }
+    
+            let newHidden = [...prevHiddenSeries];
+            if (hidden) newHidden.push(series);
+            else newHidden.splice(newHidden.indexOf(series), 1);
+            return newHidden;
+        });
+    };
+
+    const childrenWithCallbacks = React.Children.map(props.children, (child) => {
+        if(React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<{ callback: Callback,
+                updateHidden: HiddenCallback }>,
+                { callback: callback, updateHidden: updateHidden });
+        }
+    });
 
     const renderYLabels = () => props.ylabels && steps.map((step) => (
         <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
