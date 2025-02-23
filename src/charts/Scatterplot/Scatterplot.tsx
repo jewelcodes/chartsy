@@ -82,7 +82,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
     window.addEventListener("resize", handleResize);
 
     const callback: Callback = (series, x, y, connected, color, hidden) => {
-        let newData = new Object(data) as DataContainer;
+        const newData = new Object(data) as DataContainer;
         if(!newData[series]) {
             newData[series] = new Object() as Data;
             newData[series].series = series;
@@ -102,7 +102,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 return prevHiddenSeries;
             }
     
-            let newHidden = [...prevHiddenSeries];
+            const newHidden = [...prevHiddenSeries];
             if(hidden) newHidden.push(series);
             else newHidden.splice(newHidden.indexOf(series), 1);
             return newHidden;
@@ -116,7 +116,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 return prevConnectedSeries;
             }
     
-            let newConnected = [...prevConnectedSeries];
+            const newConnected = [...prevConnectedSeries];
             if(connected) newConnected.push(series);
             else newConnected.splice(newConnected.indexOf(series), 1);
             return newConnected;
@@ -346,8 +346,7 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
     }
 
     const length = props.data.length;
-
-    let sorted = [...props.data].sort((a, b) => a.x - b.x);
+    const sorted = [...props.data].sort((a, b) => a.x - b.x);
 
     if(!called) {
         setCalled(true);
