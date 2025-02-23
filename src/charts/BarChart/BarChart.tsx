@@ -53,59 +53,6 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     const [data, setData] = useState<DataContainer>({});
     const [hiddenSeries, setHiddenSeries] = useState<number[]>([]);
 
-    const { maxValue, minValue } = useMemo(() => {
-        let max = -Infinity, min = Infinity;
-        Object.keys(data).forEach((label) => {
-            data[label].values.forEach(([value]) => {
-                if(value > max) max = value;
-                if(value < min) min = value;
-            });
-        });
-
-        if(max > 0) max *= (1 + BOUNDARY_FACTOR);
-        else max *= (1 - BOUNDARY_FACTOR);
-        if(min > 0) min *= (1 - BOUNDARY_FACTOR);
-        else min *= (1 + BOUNDARY_FACTOR);
-
-        const range = max - min;
-        if(range > 1) {
-            if(min > 0) min = 0;
-            max = Math.ceil(max);
-            min = Math.floor(min);
-
-            if(max % 10) max += 10 - (max % 10);
-            if(min % 10) min -= (10 - (Math.abs(min) % 10));
-        } else {
-            let rounded = Math.round(max * 2) / 2;
-            if(rounded > max) max = rounded;
-            else max = Math.ceil(max);
-
-            rounded = Math.round(min * 2) / 2;
-            if(rounded < min) min = rounded;
-            else min = Math.floor(min);
-        }
-
-        if(max === min) max++;
-        if(max >= 10) max = adjustRange(max, true);
-        if(min <= -10) min = adjustRange(min, false);
-
-        return { maxValue: max, minValue: min };
-    }, [data, hiddenSeries]);
-
-    const steps = useMemo(() => {
-        const range = maxValue - minValue;
-        let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
-        if(stepCount > 10) stepCount = 5;
-        const stepSize = range / stepCount;
-
-        return Array.from({length: stepCount+1}, (_, i) => minValue + i * stepSize);
-    }, [minValue, maxValue]);
-
-    if(!props.children) {
-        console.error("BarChart: at least one data series must be provided");
-        return null;
-    }
-
     interface Data {
         label: string|number;
         values: [number, string, number][];
@@ -161,6 +108,54 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
         }
     });
 
+    const { maxValue, minValue } = useMemo(() => {
+        let max = -Infinity, min = Infinity;
+        Object.keys(data).forEach((label) => {
+            data[label].values.forEach(([value]) => {
+                if(value > max) max = value;
+                if(value < min) min = value;
+            });
+        });
+
+        if(max > 0) max *= (1 + BOUNDARY_FACTOR);
+        else max *= (1 - BOUNDARY_FACTOR);
+        if(min > 0) min *= (1 - BOUNDARY_FACTOR);
+        else min *= (1 + BOUNDARY_FACTOR);
+
+        const range = max - min;
+        if(range > 1) {
+            if(min > 0) min = 0;
+            max = Math.ceil(max);
+            min = Math.floor(min);
+
+            if(max % 10) max += 10 - (max % 10);
+            if(min % 10) min -= (10 - (Math.abs(min) % 10));
+        } else {
+            let rounded = Math.round(max * 2) / 2;
+            if(rounded > max) max = rounded;
+            else max = Math.ceil(max);
+
+            rounded = Math.round(min * 2) / 2;
+            if(rounded < min) min = rounded;
+            else min = Math.floor(min);
+        }
+
+        if(max === min) max++;
+        if(max >= 10) max = adjustRange(max, true);
+        if(min <= -10) min = adjustRange(min, false);
+
+        return { maxValue: max, minValue: min };
+    }, [data, hiddenSeries]);
+
+    const steps = useMemo(() => {
+        const range = maxValue - minValue;
+        let stepCount = range > 10 ? Math.ceil(range/10) : Math.ceil(range*10);
+        if(stepCount > 10) stepCount = 5;
+        const stepSize = range / stepCount;
+
+        return Array.from({length: stepCount+1}, (_, i) => minValue + i * stepSize);
+    }, [minValue, maxValue]);
+
     const renderYLabels = () => props.ylabels && steps.map((step) => (
         <span key={`step-${step}`} className="chartsy-bar-ylabel" style={{
             top: `${(1 - (step-minValue) / (maxValue-minValue)) * 100}%`,
@@ -192,6 +187,11 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
             backgroundColor: color,
         }} key={`${series}-${value}`} />
     ));
+
+    if(!props.children) {
+        console.error("BarChart: no data series were provided");
+        return null;
+    }
 
     return (<>
         {childrenWithCallbacks}
@@ -225,13 +225,14 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 }
 
 export function BarDataSeries({ ...props }: Readonly<BarDataSeriesProps>) {
+    const [called, setCalled] = useState(false);
+    const [series] = useState(Math.round(Math.random() * 1000000));
+
     if(!props.data) {
         console.error("BarDataSeries: no data was provided");
         return null;
     }
 
-    const [called, setCalled] = useState(false);
-    const [series] = useState(Math.round(Math.random() * 1000000));
     const length = props.data.length;
 
     if(!called) {
