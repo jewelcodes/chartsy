@@ -352,14 +352,13 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
         setCalled(true);
         sorted.forEach(({x, y}, index:number) => {
             if((length < window.innerWidth) || (index % Math.round(length/(window.innerWidth/5)) === 0)) {
-                props.callback && props.callback(series, x, y,
-                    props.connected??false,
+                props.callback!(series, x, y, props.connected??false,
                     props.color??"#888", props.hidden??false);
             }
         });
     } else {
-        props.updateHidden && props.updateHidden(series, props.hidden??false);
-        props.updateConnected && props.updateConnected(series, props.connected??false);
+        props.updateHidden!(series, props.hidden??false);
+        props.updateConnected!(series, props.connected??false);
     }
 
     return null;
