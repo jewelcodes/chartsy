@@ -51,11 +51,6 @@ type HiddenCallback = (series: number, hidden: boolean, force?: boolean) => void
 type ConnectedCallback = (series: number, connected: boolean, force?: boolean) => void;
 
 export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
-    if(!props.children) {
-        console.error("Scatterplot: at least one data series must be provided");
-        return null;
-    }
-
     interface Data {
         series: number;
         values: [number, number, string][]; // x, y, color
@@ -306,6 +301,11 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         </>);
     };
 
+    if(!props.children) {
+        console.error("Scatterplot: at least one data series must be provided");
+        return null;
+    }
+
     return (<>
         {childrenWithCallbacks}
 
@@ -337,13 +337,14 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 }
 
 export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesProps>) {
+    const [called, setCalled] = useState(false);
+    const [series] = useState(Math.floor(Math.random() * 1000000));
+
     if(!props.data) {
         console.error("ScatterDataSeries: no data was provided");
         return null;
     }
 
-    const [called, setCalled] = useState(false);
-    const [series] = useState(Math.floor(Math.random() * 1000000));
     const length = props.data.length;
 
     let sorted = [...props.data].sort((a, b) => a.x - b.x);
