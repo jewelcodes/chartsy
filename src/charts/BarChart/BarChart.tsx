@@ -238,13 +238,13 @@ export function BarDataSeries({ ...props }: Readonly<BarDataSeriesProps>) {
         setCalled(true);
         props.data.forEach(({label, value}, index:number) => {
             if((length < window.innerWidth) || (index % Math.round(length/window.innerWidth) === 0)) {
-                props.callback && props.callback(series, label, value,
+                props.callback!(series, label, value,
                     props.color??"#888",
                     props.hidden??false);
             }
         });
-    } else if(props.updateHidden) {
-        props.updateHidden(series, props.hidden??false);
+    } else {
+        props.updateHidden!(series, props.hidden??false);
     }
 
     return null;
