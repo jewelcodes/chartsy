@@ -346,9 +346,11 @@ export function ScatterDataSeries({ ...props }: Readonly<ScatterplotDataSeriesPr
     const [series] = useState(Math.floor(Math.random() * 1000000));
     const length = props.data.length;
 
+    let sorted = [...props.data].sort((a, b) => a.x - b.x);
+
     if(!called) {
         setCalled(true);
-        props.data.forEach(({x, y}, index:number) => {
+        sorted.forEach(({x, y}, index:number) => {
             if((length < window.innerWidth) || (index % Math.round(length/(window.innerWidth/5)) === 0)) {
                 props.callback && props.callback(series, x, y,
                     props.connected??false,
