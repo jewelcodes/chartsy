@@ -74,7 +74,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
     };
 
     const callback: Callback = (series, label, value, color, hidden) => {
-        let newData = new Object(data) as DataContainer;
+        const newData = new Object(data) as DataContainer;
         if(!newData[label]) {
             newData[label] = new Object() as Data;
             newData[label].label = label;
@@ -93,7 +93,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                 return prevHiddenSeries;
             }
     
-            let newHidden = [...prevHiddenSeries];
+            const newHidden = [...prevHiddenSeries];
             if (hidden) newHidden.push(series);
             else newHidden.splice(newHidden.indexOf(series), 1);
             return newHidden;
