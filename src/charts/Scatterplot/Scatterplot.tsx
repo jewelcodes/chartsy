@@ -102,7 +102,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     const updateHidden: HiddenCallback = (series, hidden, force) => {
         setHiddenSeries((prevHiddenSeries) => {
-            if((hidden && prevHiddenSeries.includes(series)) || (!hidden && !prevHiddenSeries.includes(series))) {
+            if((hidden && prevHiddenSeries.includes(series)) ||
+            (!hidden && !prevHiddenSeries.includes(series))) {
                 if(force) return [...prevHiddenSeries];
                 return prevHiddenSeries;
             }
@@ -116,7 +117,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     const updateConnected: ConnectedCallback = (series, connected, force) => {
         setConnectedSeries((prevConnectedSeries) => {
-            if((connected && prevConnectedSeries.includes(series)) || (!connected && !prevConnectedSeries.includes(series))) {
+            if((connected && prevConnectedSeries.includes(series)) ||
+            (!connected && !prevConnectedSeries.includes(series))) {
                 if(force) return [...prevConnectedSeries];
                 return prevConnectedSeries;
             }
@@ -298,7 +300,8 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
             {(!connectedSeries.includes(series)) && (
                 <div className="chartsy-scatterplot-point" key={`${series}-${i}`} style={{
                     left: `${(x-minValueX) / (maxValueX-minValueX) * 100}%`,
-                    top: !hiddenSeries.includes(series) ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
+                    top: !hiddenSeries.includes(series)
+                        ? `${100 - (y-minValueY) / (maxValueY-minValueY) * 100}%` : "100%",
                     backgroundColor: color,
                     opacity: hiddenSeries.includes(series) ? 0 : "inherit"}}>
                 </div>
@@ -347,7 +350,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                     {props.children && Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
                             {data[Number(series)].values.map(([x, y, color], i) =>
-                                renderPlot(x, y, color, Number(series), i, data[Number(series)].values.length))}
+                            renderPlot(x, y, color, Number(series), i, data[Number(series)].values.length))}
                         </div>
                     ))}
                 </div> {/* chartsy-scatterplot-container */}
