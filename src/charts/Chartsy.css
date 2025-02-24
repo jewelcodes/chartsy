@@ -39,3 +39,16 @@
     width: 1px;
     top: 0;
 }
+
+.chartsy-error {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+    font-weight: 500;   /* medium */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
