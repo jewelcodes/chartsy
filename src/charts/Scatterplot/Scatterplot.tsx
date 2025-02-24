@@ -326,7 +326,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                     {!props.children && <p className="chartsy-error" style={{
                         color: props.labelColor ?? "inherit"
                     }}>
-                        {props.missingDataMessage ?? "⚠️ No data series provided for Scatterplot"}
+                        {props.missingDataMessage ?? "⚠️ No data series provided for scatterplot"}
                     </p>}
 
                     {props.children && Object.keys(data).map((series) => (
