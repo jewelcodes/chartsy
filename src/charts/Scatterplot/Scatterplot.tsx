@@ -27,6 +27,7 @@ export interface ScatterplotProps {
     xgrid?: boolean;
     ygrid?: boolean;
     gridColor?: string;
+    missingDataMessage?: string|undefined;
 };
 
 export interface ScatterplotData {
@@ -325,7 +326,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                     {!props.children && <p className="chartsy-error" style={{
                         color: props.labelColor ?? "inherit"
                     }}>
-                        ⚠️ No data series provided for Scatterplot
+                        {props.missingDataMessage ?? "⚠️ No data series provided for Scatterplot"}
                     </p>}
 
                     {props.children && Object.keys(data).map((series) => (
