@@ -303,7 +303,6 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
 
     if(!props.children) {
         console.error("Scatterplot: at least one data series must be provided");
-        return null;
     }
 
     return (<>
@@ -323,7 +322,13 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 {renderYGrid()}
 
                 <div ref={container} className="chartsy-scatterplot-container">
-                    {Object.keys(data).map((series) => (
+                    {!props.children && <p className="chartsy-error" style={{
+                        color: props.labelColor ?? "inherit"
+                    }}>
+                        ⚠️ No data series provided for Scatterplot
+                    </p>}
+
+                    {props.children && Object.keys(data).map((series) => (
                         <div className="chartsy-scatterplot-series" key={series}>
                             {data[Number(series)].values.map(([x, y, color], i) =>
                                 renderPlot(x, y, color, Number(series), i, data[Number(series)].values.length))}
