@@ -223,7 +223,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
             if(obj.minValueY > props.ylim[0]) obj.minValueY = props.ylim[0];
         }
 
-        return { maxValueX: maxX, minValueX: minX, maxValueY: maxY, minValueY: minY };
+        return obj;
     }, [data, hiddenSeries, connectedSeries]);
 
     const steps = (max: number, min: number) => {
