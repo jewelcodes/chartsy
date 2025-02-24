@@ -29,6 +29,7 @@ export interface BarChartProps {
     xgrid?: boolean;
     gridColor?: string;
     rounded?: number;
+    missingDataMessage?: string|undefined;
 };
 
 export interface BarChartData {
@@ -190,7 +191,6 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
 
     if(!props.children) {
         console.error("BarChart: no data series were provided");
-        return null;
     }
 
     return (<>
@@ -212,7 +212,13 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                 {renderYLabels()}
                 {renderXGrid()}
 
-                {Object.keys(data).map((label) => (
+                {!props.children && <p className="chartsy-error" style={{
+                    color: props.labelColor ?? "inherit"
+                }}>
+                    {props.missingDataMessage ?? "⚠️ No data series provided for bar chart"}
+                </p>}
+
+                {props.children && Object.keys(data).map((label) => (
                     <div className="chartsy-bar-column" key={label}
                         style={{ gap: `${(SERIES_GAP_PERCENT / data[label].values.length)}%` }}>
                         {renderColumn(label)}
