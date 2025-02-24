@@ -28,6 +28,10 @@ export interface ScatterplotProps {
     ygrid?: boolean;
     gridColor?: string;
     missingDataMessage?: string|undefined;
+    xlim?: [number, number];
+    ylim?: [number, number];
+    xlimStep?: number;
+    ylimStep?: number;
 };
 
 export interface ScatterplotData {
@@ -207,6 +211,17 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
         if(minX <= -10) minX = adjustRange(minX, false);
         if(maxY >= 10) maxY = adjustRange(maxY, true);
         if(minY <= -10) minY = adjustRange(minY, false);
+
+        const obj = { maxValueX: maxX, minValueX: minX, maxValueY: maxY, minValueY: minY };
+        if(props.xlim && props.xlim.length >= 2 && props.xlim[0] < props.xlim[1]) {
+            if(obj.maxValueX < props.xlim[1]) obj.maxValueX = props.xlim[1];
+            if(obj.minValueX > props.xlim[0]) obj.minValueX = props.xlim[0];
+        }
+
+        if(props.ylim && props.ylim.length >= 2 && props.ylim[0] < props.ylim[1]) {
+            if(obj.maxValueY < props.ylim[1]) obj.maxValueY = props.ylim[1];
+            if(obj.minValueY > props.ylim[0]) obj.minValueY = props.ylim[0];
+        }
 
         return { maxValueX: maxX, minValueX: minX, maxValueY: maxY, minValueY: minY };
     }, [data, hiddenSeries, connectedSeries]);
