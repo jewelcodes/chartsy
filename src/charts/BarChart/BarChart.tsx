@@ -107,6 +107,7 @@ export function BarChart({ ...props }: Readonly<BarChartProps>) {
                 updateHidden: HiddenCallback }>,
                 { callback: callback, updateHidden: updateHidden });
         }
+        return child;
     });
 
     const { maxValue, minValue } = useMemo(() => {
