@@ -136,6 +136,7 @@ export function Scatterplot({ ...props }: Readonly<ScatterplotProps>) {
                 updateHidden: HiddenCallback, updateConnected: ConnectedCallback}>,
                 {callback: callback, updateHidden: updateHidden, updateConnected: updateConnected});
         }
+        return child;
     });
 
     const adjustRange = (value: number, max: boolean) => {
